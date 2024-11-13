@@ -7,6 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 
-include(GoogleTest)
-
-gtest_add_tests(tests)
+add_subdirectory(src)
+add_subdirectory(tests)
