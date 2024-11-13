@@ -1,15 +1,20 @@
-#include <gtest/gtest.h>
 #include "../../src/Array-String/01_merge_sorted_array.h"
+#include <gtest/gtest.h>
 
-TEST(MergeSortedArrayTest, setup) {
-  std::vector<int> nums1;
-  int m = 0;
-  std::vector<int> nums2;
-  int n = 0;
-
+class MergeSortedArrayTest : public testing::Test {
+protected:
   MergeSortedArray mergeSortedArray;
-  mergeSortedArray.merge(nums1, m, nums2, n);
 
-  std::vector<int> expectedNums2 = {1};
-  EXPECT_EQ(nums2, expectedNums2);
+  void callMerge(std::vector<int>& nums1, std::vector<int>& nums2) {
+    mergeSortedArray.merge(nums1, nums1.size(), nums2, nums2.size());
+  }
+};
+
+TEST_F(MergeSortedArrayTest, setup) {
+  std::vector<int> nums1;
+  std::vector<int> nums2;
+
+  callMerge(nums1, nums2);
+
+  EXPECT_EQ(nums2, std::vector<int>{1});
 }
