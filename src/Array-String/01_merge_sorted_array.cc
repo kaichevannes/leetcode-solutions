@@ -1,8 +1,5 @@
 #include "01_merge_sorted_array.h"
 
-void mergeFromLargestToSmallest(int, int, int, std::vector<int> &, int,
-                                std::vector<int> &, int);
-
 /**
  * @brief Merge two non-decreasing arrays.
  *
