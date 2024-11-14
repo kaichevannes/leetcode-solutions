@@ -55,3 +55,12 @@ TEST_F(MergeSortedArrayTest, NumsInterleaved) {
 
   EXPECT_EQ(nums1, std::vector<int>({1, 2, 3, 4, 5, 6}));
 }
+
+TEST_F(MergeSortedArrayTest, SingleNums1SingleNums2) {
+  nums1 = {2, 0};
+  nums2 = {1};
+
+  callMerge(nums1, nums2);
+
+  EXPECT_EQ(nums1, std::vector<int>({1, 2}));
+}

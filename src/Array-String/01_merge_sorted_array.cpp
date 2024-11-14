@@ -18,30 +18,19 @@ void mergeFromLargestToSmallest(int, int, int, std::vector<int> &, int,
  */
 void MergeSortedArray::merge(std::vector<int> &nums1, int m,
                              std::vector<int> &nums2, int n) {
-  auto nums1HasNoElements = [&] { return m == 0; };
-
-  if (nums1HasNoElements()) {
-    nums1 = nums2;
-    return;
-  }
-
   int largestInNums1 = m - 1;
   int largestInNums2 = n - 1;
   int insertIndex = m + n - 1;
-  mergeFromLargestToSmallest(largestInNums1, largestInNums2, insertIndex, nums1,
-                             m, nums2, n);
-};
 
-void mergeFromLargestToSmallest(int largestInNums1, int largestInNums2,
-                                int mergeIndex, std::vector<int> &nums1, int m,
-                                std::vector<int> &nums2, int n) {
-  auto notReachedNums1 = [&] { return largestInNums2 >= 0; };
+  auto moreToMergeIntoNums1 = [&] { return largestInNums2 >= 0; };
+  auto nums1NotEmpty = [&] { return largestInNums1 >= 0; };
+  auto largerElementInNums1 = [&] { return nums1[largestInNums1] > nums2[largestInNums2]; };
 
-  while (notReachedNums1()) {
-    if (nums1[largestInNums1] > nums2[largestInNums2]) {
-      nums1[mergeIndex--] = nums1[largestInNums1--];
+  while (moreToMergeIntoNums1()) {
+    if (nums1NotEmpty() && largerElementInNums1()) {
+      nums1[insertIndex--] = nums1[largestInNums1--];
     } else {
-      nums1[mergeIndex--] = nums2[largestInNums2--];
+      nums1[insertIndex--] = nums2[largestInNums2--];
     }
   }
-}
+};
