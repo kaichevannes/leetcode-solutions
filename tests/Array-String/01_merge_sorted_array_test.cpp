@@ -26,7 +26,7 @@ TEST_F(MergeSortedArrayTest, SingleElementInNums2) {
 
   callMerge(nums1, nums2);
 
-  EXPECT_EQ(nums1, std::vector<int>{0});
+  EXPECT_EQ(nums1, std::vector<int>{1});
 }
 
 TEST_F(MergeSortedArrayTest, Nums1FollowedByNums2) {
