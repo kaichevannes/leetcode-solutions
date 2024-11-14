@@ -6,4 +6,4 @@ Initialise using:
 cmake -G Ninja ..
 
 Rebuild and run tests using:
-ninja && ctest
+ninja && ctest --output_on_fail -R TestSuiteName
