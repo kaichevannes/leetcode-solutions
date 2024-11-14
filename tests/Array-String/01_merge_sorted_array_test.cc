@@ -1,5 +1,5 @@
-#include "../../src/Array-String/01_merge_sorted_array.h"
 #include <gtest/gtest.h>
+#include "../../src/Array-String/01_merge_sorted_array.h"
 
 class MergeSortedArrayTest : public testing::Test {
 protected:
