@@ -1,5 +1,5 @@
-#include "../../src/TwoPointers/01_valid_palindrome.h"
 #include <gtest/gtest.h>
+#include "../../src/two_pointers/01_valid_palindrome.h"
 
 class ValidPalindromeTest : public testing::Test {
 protected:
