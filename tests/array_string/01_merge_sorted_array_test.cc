@@ -17,7 +17,7 @@ TEST_F(MergeSortedArrayTest, SingleElementInNums1) {
 
   callMerge(nums1, nums2);
 
-  EXPECT_EQ(nums1, std::vector<int>{1});
+  EXPECT_EQ(std::vector<int>{1}, nums1);
 }
 
 TEST_F(MergeSortedArrayTest, SingleElementInNums2) {
@@ -26,7 +26,7 @@ TEST_F(MergeSortedArrayTest, SingleElementInNums2) {
 
   callMerge(nums1, nums2);
 
-  EXPECT_EQ(nums1, std::vector<int>{1});
+  EXPECT_EQ(std::vector<int>{1}, nums1);
 }
 
 TEST_F(MergeSortedArrayTest, Nums1FollowedByNums2) {
@@ -35,7 +35,7 @@ TEST_F(MergeSortedArrayTest, Nums1FollowedByNums2) {
 
   callMerge(nums1, nums2);
 
-  EXPECT_EQ(nums1, std::vector<int>({1, 2, 3, 4, 5, 6}));
+  EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
 TEST_F(MergeSortedArrayTest, Nums2FollowedByNums1) {
@@ -44,7 +44,7 @@ TEST_F(MergeSortedArrayTest, Nums2FollowedByNums1) {
 
   callMerge(nums1, nums2);
 
-  EXPECT_EQ(nums1, std::vector<int>({1, 2, 3, 4, 5, 6}));
+  EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
 TEST_F(MergeSortedArrayTest, NumsInterleaved) {
@@ -53,7 +53,7 @@ TEST_F(MergeSortedArrayTest, NumsInterleaved) {
 
   callMerge(nums1, nums2);
 
-  EXPECT_EQ(nums1, std::vector<int>({1, 2, 3, 4, 5, 6}));
+  EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
 TEST_F(MergeSortedArrayTest, SingleNums1SingleNums2) {
@@ -62,5 +62,5 @@ TEST_F(MergeSortedArrayTest, SingleNums1SingleNums2) {
 
   callMerge(nums1, nums2);
 
-  EXPECT_EQ(nums1, std::vector<int>({1, 2}));
+  EXPECT_EQ(std::vector<int>({1, 2}), nums1);
 }
