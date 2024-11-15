@@ -47,3 +47,11 @@ TEST_F(ValidPalindromeTest, singleLengthPalindrome) {
 TEST_F(ValidPalindromeTest, letterAndNumberPalindrome) {
   EXPECT_FALSE(validPalindrome.isPalindrome("0P"));
 }
+
+TEST_F(ValidPalindromeTest, fourLengthPalindrome) {
+  EXPECT_TRUE(validPalindrome.isPalindrome("abba"));
+}
+
+TEST_F(ValidPalindromeTest, fourLengthHalfPalindrome) {
+  EXPECT_FALSE(validPalindrome.isPalindrome("abca"));
+}

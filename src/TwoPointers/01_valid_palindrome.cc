@@ -3,23 +3,35 @@
 #include <iterator>
 #include <regex>
 
-bool recurseEnds(std::string, int, bool);
+std::string filterAlphaNumericCharacters(std::string);
+bool tailRecursiveIsPalindrome(std::string&, int, bool);
 
 bool ValidPalindrome::isPalindrome(std::string s) {
   std::transform(begin(s), end(s), begin(s),
                  [](char c) { return std::tolower(c); });
-  std::string alphaNumericString;
-  std::copy_if(begin(s), end(s), std::back_inserter(alphaNumericString),
-               [](char c) { return std::isalnum(c); });
-  return recurseEnds(alphaNumericString, 0, true);
+  std::string alphaNumericString = filterAlphaNumericCharacters(s);
+  return tailRecursiveIsPalindrome(alphaNumericString, 0, true);
 }
 
-bool recurseEnds(std::string s, int i, bool acc) {
-  if (i == s.length() / 2) {
-    return acc;
+std::string filterAlphaNumericCharacters(std::string s) {
+  std::string result;
+  std::copy_if(begin(s), end(s), std::back_inserter(result),
+               [](char c) { return std::isalnum(c); });
+  return result;
+}
+
+bool tailRecursiveIsPalindrome(std::string &s, int currentIndexInS,
+                               bool accumulator) {
+  bool checkedAllPairsOrOneLetterRemaining = currentIndexInS == s.length() / 2;
+  
+  if (checkedAllPairsOrOneLetterRemaining) {
+    return accumulator;
   }
 
-  bool isPalindrome = s[i] == s[s.length() - i - 1];
+  int lastIndexInS = s.length() - 1;
+  bool iHasMatchingLetter =
+      s[currentIndexInS] == s[lastIndexInS - currentIndexInS];
 
-  return recurseEnds(s, i+1, acc && isPalindrome);
+  return tailRecursiveIsPalindrome(s, currentIndexInS + 1,
+                                   accumulator && iHasMatchingLetter);
 }
