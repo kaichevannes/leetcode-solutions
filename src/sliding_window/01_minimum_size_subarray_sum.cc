@@ -4,18 +4,21 @@
 int MinimumSizeSubarraySum::minSubArrayLen(int target, std::vector<int> &nums) {
   int left = 0;
   int right = 0;
-  int result = INT_MAX;
+  int smallestSubArray = INT_MAX;
   int runningTotal = 0;
 
-  while (right < nums.size()) {
+  auto canIncreaseSlidingWindow = [&] { return right < nums.size(); };
+  auto canDecreaseSlidingWindow = [&] { return runningTotal >= target; };
+  auto sizeOfSlidingWindow = [&] { return right - left + 1; };
+
+  while (canIncreaseSlidingWindow()) {
     runningTotal += nums[right++];
-    while (runningTotal >= target) {
+    while (canDecreaseSlidingWindow()) {
       runningTotal -= nums[left++];
-      if (right - left + 1 < result) {
-        result = right - left + 1;
-      }
+      smallestSubArray = std::min(smallestSubArray, sizeOfSlidingWindow());
     }
   }
 
-  return result == INT_MAX ? 0 : result;
+  auto noSolutionFound = [&] { return smallestSubArray == INT_MAX; };
+  return noSolutionFound() ? 0 : smallestSubArray;
 }
