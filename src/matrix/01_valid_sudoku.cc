@@ -38,21 +38,21 @@ private:
   }
 };
 
-bool emptyCell(Cell cell, std::vector<std::vector<char>> &board) {
-  return board[cell.row][cell.col] == '.';
-}
-
 bool ValidSudoku::isValidSudoku(std::vector<std::vector<char>> &board) {
   SeenIn seenIn(board);
 
+  auto emptyCell = [&](Cell cell) { return board[cell.row][cell.col] == '.'; };
+
   for (int row = 0; row < board.size(); row++) {
     for (int col = 0; col < board.size(); col++) {
-      if (emptyCell({row, col}, board)) {
+      if (emptyCell({row, col})) {
         continue;
       }
+
       if (!seenIn.exists({row, col})) {
         return false;
       }
+
       seenIn.insert({row, col});
     }
   }
