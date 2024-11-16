@@ -26,7 +26,7 @@ void seen(char number, Cell cell, SeenIn &seenIn) {
 
 bool emptySquare(char squareValue) { return squareValue == '.'; }
 
-bool isValidNumberPlacement(char number, Cell cell, SeenIn &seenIn) {
+bool validNumber(char number, Cell cell, SeenIn &seenIn) {
   if (seenIn.row[cell.row].count(number) ||
       seenIn.col[cell.col].count(number) ||
       seenIn.box[boxIndex(cell)].count(number)) {
@@ -43,7 +43,7 @@ bool validCell(Cell cell, std::vector<std::vector<char>> &board,
     return true;
   }
 
-  if (!isValidNumberPlacement(number, cell, seenIn)) {
+  if (!validNumber(number, cell, seenIn)) {
     return false;
   }
 
