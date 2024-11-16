@@ -32,7 +32,7 @@ private:
   std::unordered_set<char> seenInBox[GRID_SIZE];
   std::vector<std::vector<char>> board;
 
-  int number(Cell cell) const { return board[cell.row][cell.col]; }
+  int number(Cell cell) const { return board[cell.row][cell.col] - '0'; }
 
   int boxIndex(Cell cell) const {
     int threeRowBlockIndex = (cell.row / BOX_SIZE);
