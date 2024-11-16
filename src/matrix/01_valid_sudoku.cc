@@ -1,12 +1,6 @@
 #include "01_valid_sudoku.h"
 #include <unordered_set>
 
-struct SeenIn {
-  std::unordered_set<char> row[9];
-  std::unordered_set<char> col[9];
-  std::unordered_set<char> box[9];
-};
-
 struct Cell {
   int row, col;
 };
@@ -18,10 +12,28 @@ int boxIndex(Cell cell) {
   return threeRowBlock * boxesPerRow + threeRowCol;
 }
 
+class SeenIn {
+public:
+  void insert(int number, Cell cell) {
+    row[cell.row].insert(number);
+    col[cell.col].insert(number);
+    box[boxIndex(cell)].insert(number);
+  }
+
+  bool exists(int number, Cell cell) {
+    return !(row[cell.row].count(number) ||
+             col[cell.col].count(number) ||
+             box[boxIndex(cell)].count(number));
+  }
+
+private:
+  std::unordered_set<char> row[9];
+  std::unordered_set<char> col[9];
+  std::unordered_set<char> box[9];
+};
+
 void seen(char number, Cell cell, SeenIn &seenIn) {
-  seenIn.row[cell.row].insert(number);
-  seenIn.col[cell.col].insert(number);
-  seenIn.box[boxIndex(cell)].insert(number);
+  seenIn.insert(number, cell);
 }
 
 bool emptyCell(Cell cell, std::vector<std::vector<char>> &board) {
@@ -29,9 +41,7 @@ bool emptyCell(Cell cell, std::vector<std::vector<char>> &board) {
 }
 
 bool validNumber(char number, Cell cell, SeenIn &seenIn) {
-  return !(seenIn.row[cell.row].count(number) ||
-           seenIn.col[cell.col].count(number) ||
-           seenIn.box[boxIndex(cell)].count(number));
+  return seenIn.exists(number, cell);
 }
 
 bool validCell(Cell cell, std::vector<std::vector<char>> &board,
