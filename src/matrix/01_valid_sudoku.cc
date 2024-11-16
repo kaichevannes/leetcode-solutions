@@ -32,10 +32,6 @@ private:
   std::unordered_set<char> box[9];
 };
 
-void seen(char number, Cell cell, SeenIn &seenIn) {
-  seenIn.insert(number, cell);
-}
-
 bool emptyCell(Cell cell, std::vector<std::vector<char>> &board) {
   return board[cell.row][cell.col] == '.';
 }
@@ -49,7 +45,7 @@ bool validCell(Cell cell, std::vector<std::vector<char>> &board,
   char number = board[cell.row][cell.col];
 
   if (validNumber(number, cell, seenIn)) {
-    seen(number, cell, seenIn);
+    seenIn.insert(number, cell);
     return true;
   }
 
