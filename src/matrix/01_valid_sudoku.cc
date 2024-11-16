@@ -35,9 +35,8 @@ bool isValidNumberPlacement(char number, Cell cell, SeenIn &seenIn) {
   return true;
 }
 
-bool validCell(Cell cell, std::vector<std::vector<char>> &board) {
-  SeenIn seenIn;
-
+bool validCell(Cell cell, std::vector<std::vector<char>> &board,
+               SeenIn &seenIn) {
   char number = board[cell.row][cell.col];
 
   if (emptySquare(number)) {
@@ -53,9 +52,11 @@ bool validCell(Cell cell, std::vector<std::vector<char>> &board) {
 }
 
 bool ValidSudoku::isValidSudoku(std::vector<std::vector<char>> &board) {
+  SeenIn seenIn;
+
   for (int row = 0; row < board.size(); row++) {
     for (int col = 0; col < board.size(); col++) {
-      if (!validCell(Cell{row, col}, board)) {
+      if (!validCell(Cell{row, col}, board, seenIn)) {
         return false;
       }
     }
