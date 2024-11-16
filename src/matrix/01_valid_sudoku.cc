@@ -11,50 +11,51 @@ struct Cell {
   int row, col;
 };
 
-int boxIndex(int row, int col) {
-  int threeRowBlock = (row / 3);
-  int threeRowCol = (col / 3);
+int boxIndex(Cell cell) {
+  int threeRowBlock = (cell.row / 3);
+  int threeRowCol = (cell.col / 3);
   int boxesPerRow = 3;
   return threeRowBlock * boxesPerRow + threeRowCol;
 }
 
-void seen(char number, int row, int col, SeenIn &seenIn) {
-  seenIn.row[row].insert(number);
-  seenIn.col[col].insert(number);
-  seenIn.box[boxIndex(row, col)].insert(number);
+void seen(char number, Cell cell, SeenIn &seenIn) {
+  seenIn.row[cell.row].insert(number);
+  seenIn.col[cell.col].insert(number);
+  seenIn.box[boxIndex(cell)].insert(number);
 }
 
 bool emptySquare(char squareValue) { return squareValue == '.'; }
 
-bool isValidNumberPlacement(char number, int row, int col, SeenIn &seenIn) {
-  if (seenIn.row[row].count(number) || seenIn.col[col].count(number) ||
-      seenIn.box[boxIndex(row, col)].count(number)) {
+bool isValidNumberPlacement(char number, Cell cell, SeenIn &seenIn) {
+  if (seenIn.row[cell.row].count(number) ||
+      seenIn.col[cell.col].count(number) ||
+      seenIn.box[boxIndex(cell)].count(number)) {
     return false;
   }
   return true;
 }
 
-bool validCell(Cell cell, std::vector<std::vector<char>> &board,
-                 SeenIn &seenIn) {
+bool validCell(Cell cell, std::vector<std::vector<char>> &board) {
+  SeenIn seenIn;
+
   char number = board[cell.row][cell.col];
 
-  if (emptySquare(number))
+  if (emptySquare(number)) {
     return true;
+  }
 
-  if (!isValidNumberPlacement(number, cell.row, cell.col, seenIn)) {
+  if (!isValidNumberPlacement(number, cell, seenIn)) {
     return false;
   }
 
-  seen(number, cell.row, cell.col, seenIn);
+  seen(number, cell, seenIn);
   return true;
 }
 
 bool ValidSudoku::isValidSudoku(std::vector<std::vector<char>> &board) {
-  SeenIn seenIn;
-
   for (int row = 0; row < board.size(); row++) {
     for (int col = 0; col < board.size(); col++) {
-      if (!validCell(Cell{row, col}, board, seenIn)) {
+      if (!validCell(Cell{row, col}, board)) {
         return false;
       }
     }
