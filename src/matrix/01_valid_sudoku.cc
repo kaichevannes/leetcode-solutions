@@ -2,42 +2,23 @@
 #include <set>
 
 bool ValidSudoku::isValidSudoku(std::vector<std::vector<char>> &board) {
-  for (std::vector<char> row : board) {
-    std::set<char> foundChars;
-    for (int j = 0; j < board.size(); j++) {
-      char squareValue = row[j];
-      if (squareValue != '.' && foundChars.count(squareValue)) {
+  std::set<char> seenInRow[9], seenInCol[9], seenInBox[9];
+
+  for (int row = 0; row < board.size(); row++) {
+    for (int col = 0; col < board.size(); col++) {
+      char number = board[row][col];
+
+      bool emptySquare = number == '.';
+      if (emptySquare) continue;
+
+      int box = (row / 3) * 3 + (col / 3);
+      if (seenInRow[row].count(number) || seenInCol[col].count(number) || seenInBox[box].count(number)) {
         return false;
       }
-      foundChars.insert(squareValue);
-    }
-  }
 
-  for (int j = 0; j < board.size(); j++) {
-    std::set<char> foundChars;
-    for (int i = 0; i < board.size(); i++) {
-      char squareValue = board[i][j];
-      if (squareValue != '.' && foundChars.count(squareValue)) {
-        return false;
-      }
-      foundChars.insert(squareValue);
-    }
-  }
-
-  for (int horizontalOffset = 0; horizontalOffset < board.size();
-       horizontalOffset += 3) {
-    for (int verticalOffset = 0; verticalOffset < board.size();
-         verticalOffset += 3) {
-      std::set<char> foundChars;
-      for (int i = horizontalOffset; i < horizontalOffset + 3; i++) {
-        for (int j = verticalOffset; j < verticalOffset + 3; j++) {
-          char squareValue = board[i][j];
-          if (squareValue != '.' && foundChars.count(squareValue)) {
-            return false;
-          }
-          foundChars.insert(squareValue);
-        }
-      }
+      seenInRow[row].insert(number);
+      seenInCol[col].insert(number);
+      seenInBox[box].insert(number);
     }
   }
 
