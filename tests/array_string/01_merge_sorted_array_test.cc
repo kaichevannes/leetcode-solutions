@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include "../../src/array_string/01_merge_sorted_array.h"
+#include <gtest/gtest.h>
 
 class MergeSortedArrayTest : public testing::Test {
 protected:
@@ -8,7 +8,8 @@ protected:
   std::vector<int> nums2;
 
   void callMerge(std::vector<int> &nums1, std::vector<int> &nums2) {
-    mergeSortedArray.merge(nums1, nums1.size() - nums2.size(), nums2, nums2.size());
+    mergeSortedArray.merge(nums1, nums1.size() - nums2.size(), nums2,
+                           nums2.size());
   }
 };
 
