@@ -36,15 +36,11 @@ bool emptyCell(Cell cell, std::vector<std::vector<char>> &board) {
   return board[cell.row][cell.col] == '.';
 }
 
-bool validNumber(char number, Cell cell, SeenIn &seenIn) {
-  return seenIn.exists(number, cell);
-}
-
 bool validCell(Cell cell, std::vector<std::vector<char>> &board,
                SeenIn &seenIn) {
   char number = board[cell.row][cell.col];
 
-  if (validNumber(number, cell, seenIn)) {
+  if (seenIn.exists(number, cell)) {
     seenIn.insert(number, cell);
     return true;
   }
