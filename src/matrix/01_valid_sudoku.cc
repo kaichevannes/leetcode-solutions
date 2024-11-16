@@ -24,31 +24,26 @@ void seen(char number, Cell cell, SeenIn &seenIn) {
   seenIn.box[boxIndex(cell)].insert(number);
 }
 
-bool emptySquare(char squareValue) { return squareValue == '.'; }
+bool emptyCell(Cell cell, std::vector<std::vector<char>> &board) {
+  return board[cell.row][cell.col] == '.';
+}
 
 bool validNumber(char number, Cell cell, SeenIn &seenIn) {
-  if (seenIn.row[cell.row].count(number) ||
-      seenIn.col[cell.col].count(number) ||
-      seenIn.box[boxIndex(cell)].count(number)) {
-    return false;
-  }
-  return true;
+  return !(seenIn.row[cell.row].count(number) ||
+           seenIn.col[cell.col].count(number) ||
+           seenIn.box[boxIndex(cell)].count(number));
 }
 
 bool validCell(Cell cell, std::vector<std::vector<char>> &board,
                SeenIn &seenIn) {
   char number = board[cell.row][cell.col];
 
-  if (emptySquare(number)) {
+  if (validNumber(number, cell, seenIn)) {
+    seen(number, cell, seenIn);
     return true;
   }
 
-  if (!validNumber(number, cell, seenIn)) {
-    return false;
-  }
-
-  seen(number, cell, seenIn);
-  return true;
+  return false;
 }
 
 bool ValidSudoku::isValidSudoku(std::vector<std::vector<char>> &board) {
@@ -56,6 +51,9 @@ bool ValidSudoku::isValidSudoku(std::vector<std::vector<char>> &board) {
 
   for (int row = 0; row < board.size(); row++) {
     for (int col = 0; col < board.size(); col++) {
+      if (emptyCell(Cell{row, col}, board)) {
+        continue;
+      }
       if (!validCell(Cell{row, col}, board, seenIn)) {
         return false;
       }
