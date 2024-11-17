@@ -1,11 +1,19 @@
-file(GLOB_RECURSE TEST_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.cc")
+include(test_files.cmake)
+
+list(APPEND TEST_FILES
+  ${ARRAY_STRING_TEST_FILES}
+  ${HASHMAP_TEST_FILES}
+  ${MATRIX_TEST_FILES}
+  ${SLIDING_WINDOW_TEST_FILES}
+  ${TWO_POINTERS_TEST_FILES}
+)
 
 foreach(TEST_FILE ${TEST_FILES})
   get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
 
   add_executable(${TEST_NAME} ${TEST_FILE})
 
-  target_link_libraries(${TEST_NAME} gtest gtest_main InterviewQuestions)
+  target_link_libraries(${TEST_NAME} PRIVATE gtest gtest_main InterviewQuestions rapidcheck)
   
   include(GoogleTest)
 

@@ -10,6 +10,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Third party libraries
 add_subdirectory(third_party/gtest)
+add_subdirectory(third_party/rapidcheck)
 
 # Testing
 enable_testing()
