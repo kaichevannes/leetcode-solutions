@@ -7,7 +7,7 @@ protected:
   std::vector<std::vector<char>> board;
 };
 
-TEST_F(ValidSudokuTest, EmptyBoard) {
+TEST_F(ValidSudokuTest, Unit_EmptyBoard) {
   board = {
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -22,7 +22,7 @@ TEST_F(ValidSudokuTest, EmptyBoard) {
   EXPECT_TRUE(validSudoku.isValidSudoku(board));
 };
 
-TEST_F(ValidSudokuTest, DiagonalBoard) {
+TEST_F(ValidSudokuTest, Unit_DiagonalBoard) {
   board = {
       {'1', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '2', '.', '.', '.', '.', '.', '.', '.'},
@@ -37,7 +37,7 @@ TEST_F(ValidSudokuTest, DiagonalBoard) {
   EXPECT_TRUE(validSudoku.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, InvalidRow) {
+TEST_F(ValidSudokuTest, Unit_InvalidRow) {
   board = {
       {'1', '.', '.', '1', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -52,7 +52,7 @@ TEST_F(ValidSudokuTest, InvalidRow) {
   EXPECT_FALSE(validSudoku.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, MultipleInvalidRows) {
+TEST_F(ValidSudokuTest, Unit_MultipleInvalidRows) {
   board = {
       {'1', '.', '.', '1', '.', '.', '1', '.', '.'},
       {'.', '2', '2', '.', '2', '.', '.', '2', '.'},
@@ -67,7 +67,7 @@ TEST_F(ValidSudokuTest, MultipleInvalidRows) {
   EXPECT_FALSE(validSudoku.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, InvalidColumn) {
+TEST_F(ValidSudokuTest, Unit_InvalidColumn) {
   board = {
       {'1', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -82,7 +82,7 @@ TEST_F(ValidSudokuTest, InvalidColumn) {
   EXPECT_FALSE(validSudoku.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, MultipleInvalidColumns) {
+TEST_F(ValidSudokuTest, Unit_MultipleInvalidColumns) {
   board = {
       {'1', '2', '.', '4', '.', '6', '7', '.', '9'},
       {'.', '2', '3', '.', '5', '.', '.', '8', '9'},
@@ -97,7 +97,7 @@ TEST_F(ValidSudokuTest, MultipleInvalidColumns) {
   EXPECT_FALSE(validSudoku.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, InvalidSubBox) {
+TEST_F(ValidSudokuTest, Unit_InvalidSubBox) {
   board = {
       {'.', '.', '.', '.', '.', '.', '.', '1', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -112,7 +112,7 @@ TEST_F(ValidSudokuTest, InvalidSubBox) {
   EXPECT_FALSE(validSudoku.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, MultipleInvalidSubBoxes) {
+TEST_F(ValidSudokuTest, Unit_MultipleInvalidSubBoxes) {
   board = {
       {'1', '.', '.', '1', '2', '3', '8', '.', '.'},
       {'.', '1', '.', '3', '.', '.', '7', '8', '.'},
@@ -127,7 +127,7 @@ TEST_F(ValidSudokuTest, MultipleInvalidSubBoxes) {
   EXPECT_FALSE(validSudoku.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, ValidSudoku) {
+TEST_F(ValidSudokuTest, Unit_ValidSudoku) {
   board = {
       {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
       {'6', '.', '.', '1', '9', '5', '.', '.', '.'},

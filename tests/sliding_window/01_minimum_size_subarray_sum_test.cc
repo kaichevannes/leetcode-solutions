@@ -8,37 +8,37 @@ protected:
   std::vector<int> nums;
 };
 
-TEST_F(MinimumSizeSubarraySumTest, SubarrayMatchesTarget) {
+TEST_F(MinimumSizeSubarraySumTest, Unit_SubarrayMatchesTarget) {
   target = 2;
   nums = {2};
   EXPECT_EQ(1, minimumSizeSubArraySum.minSubArrayLen(target, nums));
 }
 
-TEST_F(MinimumSizeSubarraySumTest, NoSuchSubarray) {
+TEST_F(MinimumSizeSubarraySumTest, Unit_NoSuchSubarray) {
   target = 100;
   nums = {1,2,3,4,5};
   EXPECT_EQ(0, minimumSizeSubArraySum.minSubArrayLen(target, nums));
 }
 
-TEST_F(MinimumSizeSubarraySumTest, SpreadOutSubarray) {
+TEST_F(MinimumSizeSubarraySumTest, Unit_SpreadOutSubarray) {
   target = 7;
   nums = {1, 1, 3, 4, 1};
   EXPECT_EQ(2, minimumSizeSubArraySum.minSubArrayLen(target, nums));
 }
 
-TEST_F(MinimumSizeSubarraySumTest, DuplicateInSubarray) {
+TEST_F(MinimumSizeSubarraySumTest, Unit_DuplicateInSubarray) {
   target = 4;
   nums = {1, 4, 4};
   EXPECT_EQ(1, minimumSizeSubArraySum.minSubArrayLen(target, nums));
 }
 
-TEST_F(MinimumSizeSubarraySumTest, LongSubarray) {
+TEST_F(MinimumSizeSubarraySumTest, Unit_LongSubarray) {
   target = 10;
   nums = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
   EXPECT_EQ(10, minimumSizeSubArraySum.minSubArrayLen(target, nums));
 }
 
-TEST_F(MinimumSizeSubarraySumTest, ContiguousSubarray) {
+TEST_F(MinimumSizeSubarraySumTest, Unit_ContiguousSubarray) {
   target = 7;
   nums = {3, 1, 4};
   EXPECT_EQ(3, minimumSizeSubArraySum.minSubArrayLen(target, nums));
