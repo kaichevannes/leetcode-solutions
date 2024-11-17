@@ -5,6 +5,8 @@ project("interview-150")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_subdirectory(third_party/gtest)
+
 enable_testing()
 
 add_subdirectory(src)
