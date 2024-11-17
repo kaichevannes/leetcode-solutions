@@ -28,14 +28,13 @@ public:
   }
 
 private:
-  std::unordered_set<char> seenInRow[GRID_SIZE];
-  std::unordered_set<char> seenInCol[GRID_SIZE];
-  std::unordered_set<char> seenInBox[GRID_SIZE];
+  std::unordered_set<char> seenInRow[GRID_SIZE], seenInCol[GRID_SIZE],
+      seenInBox[GRID_SIZE];
   std::vector<std::vector<char>> board;
 
-  int number(Cell cell) const { 
+  int number(Cell cell) const {
     assert(std::isdigit(board[cell.row][cell.col]));
-    return board[cell.row][cell.col] - '0'; 
+    return board[cell.row][cell.col] - '0';
   }
 
   int boxIndex(Cell cell) const {
