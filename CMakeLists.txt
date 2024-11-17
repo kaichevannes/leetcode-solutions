@@ -5,8 +5,13 @@ project("interview-150")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Config
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Third party libraries
 add_subdirectory(third_party/gtest)
 
+# Testing
 enable_testing()
 
 add_subdirectory(src)
