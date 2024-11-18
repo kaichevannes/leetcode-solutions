@@ -6,52 +6,52 @@ protected:
   ValidPalindrome validPalindrome;
 };
 
-TEST_F(ValidPalindromeTest, Unit_emptyString) {
+TEST_F(ValidPalindromeTest, emptyString) {
   EXPECT_TRUE(validPalindrome.isPalindrome(""));
 };
 
-TEST_F(ValidPalindromeTest, Unit_twoLengthPalindrome) {
+TEST_F(ValidPalindromeTest, twoLengthPalindrome) {
   EXPECT_TRUE(validPalindrome.isPalindrome("ss"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_numberPalindrome) {
+TEST_F(ValidPalindromeTest, numberPalindrome) {
   EXPECT_TRUE(validPalindrome.isPalindrome("00"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_twoLengthDifferentCasePaldindome) {
+TEST_F(ValidPalindromeTest, twoLengthDifferentCasePaldindome) {
   EXPECT_TRUE(validPalindrome.isPalindrome("bB"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_twoLengthNotPalindrome) {
+TEST_F(ValidPalindromeTest, twoLengthNotPalindrome) {
 
   EXPECT_FALSE(validPalindrome.isPalindrome("ql"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_palindromeWithSpaces) {
+TEST_F(ValidPalindromeTest, palindromeWithSpaces) {
 
   EXPECT_TRUE(validPalindrome.isPalindrome("ab cde fggfe dcb a"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_palindromeWithPunctuation) {
+TEST_F(ValidPalindromeTest, palindromeWithPunctuation) {
   EXPECT_TRUE(validPalindrome.isPalindrome("A man, a plan, a canal: Panama"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_notPalindromeWithPunctuation) {
+TEST_F(ValidPalindromeTest, notPalindromeWithPunctuation) {
   EXPECT_FALSE(validPalindrome.isPalindrome("Sentence; normal sentence."));
 }
 
-TEST_F(ValidPalindromeTest, Unit_singleLengthPalindrome) {
+TEST_F(ValidPalindromeTest, singleLengthPalindrome) {
   EXPECT_TRUE(validPalindrome.isPalindrome("Y"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_letterAndNumberPalindrome) {
+TEST_F(ValidPalindromeTest, letterAndNumberPalindrome) {
   EXPECT_FALSE(validPalindrome.isPalindrome("0P"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_fourLengthPalindrome) {
+TEST_F(ValidPalindromeTest, fourLengthPalindrome) {
   EXPECT_TRUE(validPalindrome.isPalindrome("abba"));
 }
 
-TEST_F(ValidPalindromeTest, Unit_fourLengthHalfPalindrome) {
+TEST_F(ValidPalindromeTest, fourLengthHalfPalindrome) {
   EXPECT_FALSE(validPalindrome.isPalindrome("abca"));
 }

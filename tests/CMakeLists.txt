@@ -13,7 +13,7 @@ foreach(TEST_FILE ${TEST_FILES})
 
   add_executable(${TEST_NAME} ${TEST_FILE})
 
-  target_link_libraries(${TEST_NAME} PRIVATE gtest gtest_main InterviewQuestions rapidcheck)
+  target_link_libraries(${TEST_NAME} PRIVATE gtest gtest_main InterviewQuestions rapidcheck rapidcheck_gtest)
   
   include(GoogleTest)
 

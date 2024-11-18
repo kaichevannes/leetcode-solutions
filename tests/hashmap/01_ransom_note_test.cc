@@ -8,49 +8,49 @@ protected:
   std::string magazine;
 };
 
-TEST_F(RansomNoteTest, Unit_oneLengthRansomIsMagazine) {
+TEST_F(RansomNoteTest, oneLengthRansomIsMagazine) {
   ransom = "a";
   magazine = "a";
   EXPECT_TRUE(ransomNote.canConstruct(ransom, magazine));
 }
 
-TEST_F(RansomNoteTest, Unit_oneLengthInvalid) {
+TEST_F(RansomNoteTest, oneLengthInvalid) {
   ransom = "a";
   magazine = "b";
   EXPECT_FALSE(ransomNote.canConstruct(ransom, magazine));
 }
 
-TEST_F(RansomNoteTest, Unit_ransomOrderedSubsetOfMagazine) {
+TEST_F(RansomNoteTest, ransomOrderedSubsetOfMagazine) {
   ransom = "abc";
   magazine = "abcdefg";
   EXPECT_TRUE(ransomNote.canConstruct(ransom, magazine));
 }
 
-TEST_F(RansomNoteTest, Unit_ransomOutOfOrderSubsetOfMagazine) {
+TEST_F(RansomNoteTest, ransomOutOfOrderSubsetOfMagazine) {
   ransom = "cba";
   magazine = "abcdefg";
   EXPECT_TRUE(ransomNote.canConstruct(ransom, magazine));
 }
 
-TEST_F(RansomNoteTest, Unit_ransomSubsetOfOutOfOrderMagazine) {
+TEST_F(RansomNoteTest, ransomSubsetOfOutOfOrderMagazine) {
   ransom = "abc";
   magazine = "gfedcba";
   EXPECT_TRUE(ransomNote.canConstruct(ransom, magazine));
 }
 
-TEST_F(RansomNoteTest, Unit_duplicateLettersValid) {
+TEST_F(RansomNoteTest, duplicateLettersValid) {
   ransom = "gggggg";
   magazine = "agbgcgdgegfg";
   EXPECT_TRUE(ransomNote.canConstruct(ransom, magazine));
 }
 
-TEST_F(RansomNoteTest, Unit_duplicateLettersInvalid) {
+TEST_F(RansomNoteTest, duplicateLettersInvalid) {
   ransom = "ggggggg";
   magazine = "agbgcgdgegfg";
   EXPECT_FALSE(ransomNote.canConstruct(ransom, magazine));
 }
 
-TEST_F(RansomNoteTest, Unit_sortedRansomAndMagazineDontLineUp) {
+TEST_F(RansomNoteTest, sortedRansomAndMagazineDontLineUp) {
   ransom = "ac";
   magazine = "abc";
   EXPECT_TRUE(ransomNote.canConstruct(ransom, magazine));

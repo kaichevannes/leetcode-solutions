@@ -8,6 +8,15 @@ cmake -G Ninja ..
 Rebuild and run tests using:
 ninja && ctest --output_on_failure -R TestSuiteName
 
+To run only unit tests add:
+-E _RapidCheck
+
+Most of the time this should work:
+-E _R
+
+To run only the property tests:
+-R TestSuiteName_R
+
 To avoid having to add the --output-on-failure flag when manually testing, add
 this environment variable:
 export CTEST_OUTPUT_ON_FAILURE=1
