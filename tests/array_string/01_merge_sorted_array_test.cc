@@ -70,7 +70,6 @@ TEST_F(MergeSortedArrayTest, SingleNums1SingleNums2) {
   EXPECT_EQ(std::vector<int>({1, 2}), nums1);
 }
 
-
 TEST_F(MergeSortedArrayTest, LeadingZerosInNums2) {
   nums1 = {0, 0, 0};
   nums2 = {0, 0, 1};
@@ -82,32 +81,31 @@ TEST_F(MergeSortedArrayTest, LeadingZerosInNums2) {
 
 void logVector(std::string vectorName, std::vector<int> vec) {
   RC_LOG() << vectorName << ": [";
-  for (auto i: vec) {
+  for (auto i : vec) {
     RC_LOG() << i << ' ';
   }
   RC_LOG() << ']' << std::endl;
 }
 
 RC_GTEST_FIXTURE_PROP(MergeSortedArrayTest, Commutativity, ()) {
-  const auto m = *rc::gen::inRange(0, 200);
-  const auto n = *rc::gen::inRange(0, 200);
-  RC_PRE(m + n >= 1);
+  const auto elementsInNums1 = *rc::gen::inRange(0, 200);
+  const auto elementsInNums2 = *rc::gen::inRange(0, 200);
+  auto padWithZeros = [=](auto &nums) {
+    nums.resize(elementsInNums1 + elementsInNums2);
+  };
+  RC_PRE(elementsInNums1 + elementsInNums2 >= 1);
 
-  auto nums1 =
-      *rc::gen::container<std::vector<int>>(m, rc::gen::arbitrary<int>());
-  auto nums2 =
-      *rc::gen::container<std::vector<int>>(n, rc::gen::arbitrary<int>());
-  int firstInputSize = nums1.size() + nums2.size();
-  int secondInputSize = nums2.size();
-  nums1.resize(firstInputSize);
+  auto nums1 = *rc::gen::container<std::vector<int>>(elementsInNums1,
+                                                     rc::gen::arbitrary<int>());
+  auto nums2 = *rc::gen::container<std::vector<int>>(elementsInNums2,
+                                                     rc::gen::arbitrary<int>());
+  padWithZeros(nums1);
   callMerge(nums1, nums2);
 
   auto nums1Copy = nums1;
   auto nums2Copy = nums2;
-  nums2Copy.resize(firstInputSize);
-
+  padWithZeros(nums2Copy);
   callMerge(nums2Copy, nums1Copy);
 
   RC_ASSERT(nums1 == nums2Copy);
 }
-
