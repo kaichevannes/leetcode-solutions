@@ -84,16 +84,19 @@ TEST_F(MergeSortedArrayTest, LeadingZerosInNums2) {
 
 class MergeSortedArrayTestProperty : public MergeSortedArrayTest {
 protected:
-  const int m = *rc::gen::inRange(0, 200);
-  const int n = *rc::gen::inRange(0, 200);
+  int m = *rc::gen::inRange(0, 200);
+  int n = *rc::gen::inRange(0, 200);
   std::vector<int> nums1 = nonDecreasingVector(m);
   std::vector<int> nums2 = nonDecreasingVector(n);
 
   bool preConditionsMet() { return m + n >= 1; }
 
+  void padWithZeros(std::vector<int> &nums) { nums.resize(m + n, 0); }
+
 private:
   std::vector<int> nonDecreasingVector(int size) {
-    std::vector<int> vec = *rc::gen::container<std::vector<int>>(size, rc::gen::arbitrary<int>());
+    std::vector<int> vec =
+        *rc::gen::container<std::vector<int>>(size, rc::gen::arbitrary<int>());
     std::sort(vec.begin(), vec.end());
     return vec;
   }
@@ -108,10 +111,9 @@ void logVector(std::string vectorName, std::vector<int> vec) {
 }
 
 RC_GTEST_FIXTURE_PROP(MergeSortedArrayTestProperty, Commutativity, ()) {
-  auto padWithZeros = [=](std::vector<int> &nums) { nums.resize(m + n, 0); };
+  RC_PRE(preConditionsMet());
   std::vector<int> nums1Copy = nums1;
   std::vector<int> nums2Copy = nums2;
-  RC_PRE(preConditionsMet());
 
   padWithZeros(nums1);
   padWithZeros(nums2Copy);
@@ -122,5 +124,51 @@ RC_GTEST_FIXTURE_PROP(MergeSortedArrayTestProperty, Commutativity, ()) {
   RC_ASSERT(nums1 == nums2Copy);
 }
 
-// R_GTEST_FIXTURE_PROP(MergeSortedArrayTest, NumberOfElementsIsCorrect, ()) {
-// }
+RC_GTEST_FIXTURE_PROP(MergeSortedArrayTestProperty, HasCorrectElements, ()) {
+  RC_PRE(preConditionsMet());
+
+  std::vector<int> elements;
+  elements.reserve(m + n);
+  elements.insert(elements.end(), nums1.begin(), nums1.end());
+  elements.insert(elements.end(), nums2.begin(), nums2.end());
+
+  padWithZeros(nums1);
+  callMerge(nums1, nums2);
+
+  RC_ASSERT(std::is_permutation(nums1.begin(), nums1.end(), elements.begin()));
+}
+
+RC_GTEST_FIXTURE_PROP(MergeSortedArrayTestProperty, Nums1MergedWithEmptyIsNums1,
+                      ()) {
+  n = 0;
+  nums2 = {};
+  RC_PRE(preConditionsMet());
+
+  std::vector<int> nums1Before = nums1;
+  padWithZeros(nums1);
+  callMerge(nums1, nums2);
+
+  RC_ASSERT(nums1Before == nums1);
+}
+
+RC_GTEST_FIXTURE_PROP(MergeSortedArrayTestProperty, EmptyMergedWithNums2IsNums2,
+                      ()) {
+  m = 0;
+  nums1 = {};
+  RC_PRE(preConditionsMet());
+
+  std::vector<int> nums2Before = nums2;
+  padWithZeros(nums1);
+  callMerge(nums1, nums2);
+
+  RC_ASSERT(nums2Before == nums2);
+}
+
+RC_GTEST_FIXTURE_PROP(MergeSortedArrayTestProperty, NonDecreasingOrder, ()) {
+  RC_PRE(preConditionsMet());
+
+  padWithZeros(nums1);
+  callMerge(nums1, nums2);
+
+  RC_ASSERT(std::is_sorted(nums1.begin(), nums1.end()));
+}
