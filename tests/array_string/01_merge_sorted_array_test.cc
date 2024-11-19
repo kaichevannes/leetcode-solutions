@@ -1,7 +1,10 @@
 #include "../../src/array_string/01_merge_sorted_array.h"
 #include "rapidcheck/Log.h"
 #include "rapidcheck/gen/Arbitrary.h"
+#include <algorithm>
+#include <functional>
 #include <gtest/gtest.h>
+#include <numeric>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
@@ -79,33 +82,45 @@ TEST_F(MergeSortedArrayTest, LeadingZerosInNums2) {
   EXPECT_EQ(std::vector<int>({0, 0, 1}), nums1);
 }
 
-void logVector(std::string vectorName, std::vector<int> vec) {
-  RC_LOG() << vectorName << ": [";
-  for (auto i : vec) {
-    RC_LOG() << i << ' ';
+class MergeSortedArrayTestProperty : public MergeSortedArrayTest {
+protected:
+  const int m = *rc::gen::inRange(0, 200);
+  const int n = *rc::gen::inRange(0, 200);
+  std::vector<int> nums1 = nonDecreasingVector(m);
+  std::vector<int> nums2 = nonDecreasingVector(n);
+
+  bool preConditionsMet() { return m + n >= 1; }
+
+private:
+  std::vector<int> nonDecreasingVector(int size) {
+    std::vector<int> vec = *rc::gen::container<std::vector<int>>(size, rc::gen::arbitrary<int>());
+    std::sort(vec.begin(), vec.end());
+    return vec;
   }
-  RC_LOG() << ']' << std::endl;
+};
+
+void logVector(std::string vectorName, std::vector<int> vec) {
+  std::cerr << vectorName << ": [";
+  for (auto i : vec) {
+    std::cerr << i << ' ';
+  }
+  std::cerr << ']' << std::endl;
 }
 
-RC_GTEST_FIXTURE_PROP(MergeSortedArrayTest, Commutativity, ()) {
-  const auto elementsInNums1 = *rc::gen::inRange(0, 200);
-  const auto elementsInNums2 = *rc::gen::inRange(0, 200);
-  auto padWithZeros = [=](auto &nums) {
-    nums.resize(elementsInNums1 + elementsInNums2);
-  };
-  RC_PRE(elementsInNums1 + elementsInNums2 >= 1);
+RC_GTEST_FIXTURE_PROP(MergeSortedArrayTestProperty, Commutativity, ()) {
+  auto padWithZeros = [=](std::vector<int> &nums) { nums.resize(m + n, 0); };
+  std::vector<int> nums1Copy = nums1;
+  std::vector<int> nums2Copy = nums2;
+  RC_PRE(preConditionsMet());
 
-  auto nums1 = *rc::gen::container<std::vector<int>>(elementsInNums1,
-                                                     rc::gen::arbitrary<int>());
-  auto nums2 = *rc::gen::container<std::vector<int>>(elementsInNums2,
-                                                     rc::gen::arbitrary<int>());
   padWithZeros(nums1);
-  callMerge(nums1, nums2);
-
-  auto nums1Copy = nums1;
-  auto nums2Copy = nums2;
   padWithZeros(nums2Copy);
+
+  callMerge(nums1, nums2);
   callMerge(nums2Copy, nums1Copy);
 
   RC_ASSERT(nums1 == nums2Copy);
 }
+
+// R_GTEST_FIXTURE_PROP(MergeSortedArrayTest, NumberOfElementsIsCorrect, ()) {
+// }
