@@ -1,10 +1,6 @@
 #include "../../src/array_string/01_merge_sorted_array.h"
-#include "rapidcheck/Log.h"
-#include "rapidcheck/gen/Arbitrary.h"
 #include <algorithm>
-#include <functional>
 #include <gtest/gtest.h>
-#include <numeric>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 

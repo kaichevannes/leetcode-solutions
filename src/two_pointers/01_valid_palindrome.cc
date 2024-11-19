@@ -4,7 +4,7 @@
 #include <regex>
 
 std::string filterAlphaNumericCharacters(std::string);
-bool tailRecursiveIsPalindrome(std::string&, int, bool);
+bool tailRecursiveIsPalindrome(std::string &, int, bool);
 
 bool ValidPalindrome::isPalindrome(std::string s) {
   std::transform(begin(s), end(s), begin(s),
@@ -23,7 +23,7 @@ std::string filterAlphaNumericCharacters(std::string s) {
 bool tailRecursiveIsPalindrome(std::string &s, int currentIndexInS,
                                bool accumulator) {
   bool checkedAllPairsOrOneLetterRemaining = currentIndexInS == s.length() / 2;
-  
+
   if (checkedAllPairsOrOneLetterRemaining) {
     return accumulator;
   }
