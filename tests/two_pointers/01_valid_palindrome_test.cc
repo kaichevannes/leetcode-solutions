@@ -71,20 +71,19 @@ protected:
   }
 
   rc::Gen<std::string> genOddPalindrome() {
-    return rc::gen::mapcat(
-        genEvenPalindrome(), [](std::string palindrome) {
-          return rc::gen::map<char>([palindrome](char middleLetter) {
-            std::string oddPalindrome = palindrome;
-            int middleIndex = oddPalindrome.size() / 2;
-            oddPalindrome.insert(oddPalindrome.begin() + middleIndex, middleLetter);
-            return oddPalindrome;
-          });
-        });
+    return rc::gen::mapcat(genEvenPalindrome(), [](std::string palindrome) {
+      return rc::gen::map<char>([palindrome](char middleLetter) {
+        std::string oddPalindrome = palindrome;
+        int middleIndex = oddPalindrome.size() / 2;
+        oddPalindrome.insert(oddPalindrome.begin() + middleIndex, middleLetter);
+        return oddPalindrome;
+      });
+    });
   }
 
   rc::Gen<std::string> genNonPalindrome() {
     rc::Gen<std::string> genNonPalindromeAlphaNumString =
-        rc::gen::withSize([=](int size) {
+        rc::gen::withSize([this](int size) {
           size = std::min(2, size);
           return rc::gen::mapcat(
               rc::gen::container<std::string>(size, genAlphaNumChar()),
@@ -103,12 +102,9 @@ protected:
               });
         });
 
-    rc::Gen<std::string> genSpecialString =
-        rc::gen::container<std::string>(genSpecialChar());
-
     return rc::gen::mapcat(
-        genNonPalindromeAlphaNumString, [=](std::string palindrome) {
-          return rc::gen::map(genSpecialString, [palindrome](
+        genNonPalindromeAlphaNumString, [this](std::string palindrome) {
+          return rc::gen::map(genSpecialString(), [palindrome](
                                                     std::string specialChars) {
             std::string finalPalindrome = palindrome;
             for (char specialChar : specialChars) {
@@ -133,6 +129,10 @@ private:
     return rc::gen::suchThat(rc::gen::inRange<char>(33, 127), [](char c) {
       return c != '\\' && !std::isalnum(c);
     });
+  }
+
+  rc::Gen<std::string> genSpecialString() {
+    return rc::gen::container<std::string>(genSpecialChar());
   }
 };
 
