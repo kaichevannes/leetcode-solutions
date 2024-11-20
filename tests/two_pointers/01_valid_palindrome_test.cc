@@ -79,17 +79,15 @@ protected:
                         });
   }
   rc::Gen<std::string> genNonPalindrome() {
-    rc::Gen<char> genAlphaNumChar = rc::gen::suchThat(
-        rc::gen::character<char>(), [](char c) { return std::isalnum(c); });
     rc::Gen<std::string> genAlphaNumString =
-        rc::gen::container<std::string>(genAlphaNumChar);
+        rc::gen::container<std::string>(genAlphaNumChar());
     rc::Gen<std::string> genNonPalindromeAlphaNumString =
         rc::gen::withSize([=](int size) {
           if (size < 2) {
             size = 2;
           }
           return rc::gen::mapcat(
-              rc::gen::container<std::string>(size, genAlphaNumChar),
+              rc::gen::container<std::string>(size, genAlphaNumChar()),
               [](std::string str) {
                 return rc::gen::map(
                     rc::gen::inRange<int>(0, str.size() / 2), [str](int index) {
@@ -126,6 +124,12 @@ protected:
             return finalPalindrome;
           });
         });
+  }
+
+private:
+  rc::Gen<char> genAlphaNumChar() {
+    return rc::gen::suchThat(rc::gen::character<char>(),
+                             [](char c) { return std::isalnum(c); });
   }
 };
 
