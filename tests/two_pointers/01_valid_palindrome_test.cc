@@ -71,13 +71,15 @@ protected:
   }
 
   rc::Gen<std::string> genOddPalindrome() {
-    std::string middleLetter = {*rc::gen::character<char>()};
-    return rc::gen::map(genEvenPalindrome(),
-                        [middleLetter](std::string palindrome) {
-                          int middleIndex = palindrome.size() / 2;
-                          palindrome.insert(middleIndex, middleLetter);
-                          return palindrome;
-                        });
+    return rc::gen::mapcat(
+        genEvenPalindrome(), [](std::string palindrome) {
+          return rc::gen::map<char>([palindrome](char middleLetter) {
+            std::string oddPalindrome = palindrome;
+            int middleIndex = oddPalindrome.size() / 2;
+            oddPalindrome.insert(oddPalindrome.begin() + middleIndex, middleLetter);
+            return oddPalindrome;
+          });
+        });
   }
 
   rc::Gen<std::string> genNonPalindrome() {
@@ -101,11 +103,8 @@ protected:
               });
         });
 
-    rc::Gen<char> genSpecialChar =
-        rc::gen::suchThat(rc::gen::inRange<char>(33, 127),
-                          [](char c) { return c != '\\' && !std::isalnum(c); });
     rc::Gen<std::string> genSpecialString =
-        rc::gen::container<std::string>(genSpecialChar);
+        rc::gen::container<std::string>(genSpecialChar());
 
     return rc::gen::mapcat(
         genNonPalindromeAlphaNumString, [=](std::string palindrome) {
@@ -128,6 +127,12 @@ private:
   rc::Gen<char> genAlphaNumChar() {
     return rc::gen::suchThat(rc::gen::character<char>(),
                              [](char c) { return std::isalnum(c); });
+  }
+
+  rc::Gen<char> genSpecialChar() {
+    return rc::gen::suchThat(rc::gen::inRange<char>(33, 127), [](char c) {
+      return c != '\\' && !std::isalnum(c);
+    });
   }
 };
 
