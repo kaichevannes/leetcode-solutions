@@ -1,6 +1,4 @@
 #include "../../src/two_pointers/01_valid_palindrome.h"
-#include "rapidcheck/gen/Arbitrary.h"
-#include "rapidcheck/gen/Transform.h"
 #include <gtest/gtest.h>
 #include <random>
 #include <rapidcheck.h>
@@ -131,11 +129,9 @@ private:
 
   static std::string unPalindrome(std::string str) {
     std::string nonPalindrome = str;
-    int indexToChange = str.size() - 1;
+    nonPalindrome[str.size() - 1] = nonPalindrome[0] + 1;
     if (!std::isalnum(nonPalindrome[0] + 1)) {
-      nonPalindrome[indexToChange] = 'a';
-    } else {
-      nonPalindrome[indexToChange] = nonPalindrome[0] + 1;
+      nonPalindrome[str.size() - 1] = 'a';
     }
     return nonPalindrome;
   }
