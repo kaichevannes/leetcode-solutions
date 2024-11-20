@@ -69,6 +69,7 @@ protected:
       return firstHalf + secondHalf;
     });
   }
+
   rc::Gen<std::string> genOddPalindrome() {
     std::string middleLetter = {*rc::gen::character<char>()};
     return rc::gen::map(genEvenPalindrome(),
@@ -78,14 +79,11 @@ protected:
                           return palindrome;
                         });
   }
+
   rc::Gen<std::string> genNonPalindrome() {
-    rc::Gen<std::string> genAlphaNumString =
-        rc::gen::container<std::string>(genAlphaNumChar());
     rc::Gen<std::string> genNonPalindromeAlphaNumString =
         rc::gen::withSize([=](int size) {
-          if (size < 2) {
-            size = 2;
-          }
+          size = std::min(2, size);
           return rc::gen::mapcat(
               rc::gen::container<std::string>(size, genAlphaNumChar()),
               [](std::string str) {
