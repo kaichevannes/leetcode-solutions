@@ -82,40 +82,21 @@ protected:
   }
 
   rc::Gen<std::string> genNonPalindrome() {
-    rc::Gen<std::string> genNonPalindromeAlphaNumString =
-        rc::gen::withSize([this](int size) {
-          size = std::min(2, size);
-          return rc::gen::mapcat(
-              rc::gen::container<std::string>(size, genAlphaNumChar()),
-              [](std::string str) {
-                return rc::gen::map(
-                    rc::gen::inRange<int>(0, str.size() / 2), [str](int index) {
-                      std::string nonPalindrome = str;
-                      int indexToChange = str.size() - index - 1;
-                      if (!std::isalnum(nonPalindrome[index] + 1)) {
-                        nonPalindrome[indexToChange] = 'a';
-                      } else {
-                        nonPalindrome[indexToChange] = nonPalindrome[index] + 1;
-                      }
-                      return nonPalindrome;
-                    });
-              });
-        });
-
     return rc::gen::mapcat(
-        genNonPalindromeAlphaNumString, [this](std::string palindrome) {
-          return rc::gen::map(genSpecialString(), [palindrome](
-                                                    std::string specialChars) {
-            std::string finalPalindrome = palindrome;
-            for (char specialChar : specialChars) {
-              std::random_device rd;
-              std::mt19937 rng(rd());
-              std::uniform_int_distribution<int> dist(0, palindrome.size() - 1);
-              finalPalindrome.insert(finalPalindrome.begin() + dist(rng),
-                                     specialChar);
-            }
-            return finalPalindrome;
-          });
+        genNonPalindromeAlphaNum(), [this](std::string palindrome) {
+          return rc::gen::map(
+              genSpecialString(), [palindrome](std::string specialChars) {
+                std::string finalPalindrome = palindrome;
+                for (char specialChar : specialChars) {
+                  std::random_device rd;
+                  std::mt19937 rng(rd());
+                  std::uniform_int_distribution<int> dist(0, palindrome.size() -
+                                                                 1);
+                  finalPalindrome.insert(finalPalindrome.begin() + dist(rng),
+                                         specialChar);
+                }
+                return finalPalindrome;
+              });
         });
   }
 
@@ -133,6 +114,27 @@ private:
 
   rc::Gen<std::string> genSpecialString() {
     return rc::gen::container<std::string>(genSpecialChar());
+  }
+
+  rc::Gen<std::string> genNonPalindromeAlphaNum() {
+    return rc::gen::withSize([this](int size) {
+      size = std::min(2, size);
+      return rc::gen::mapcat(
+          rc::gen::container<std::string>(size, genAlphaNumChar()),
+          [](std::string str) {
+            return rc::gen::map(
+                rc::gen::inRange<int>(0, str.size() / 2), [str](int index) {
+                  std::string nonPalindrome = str;
+                  int indexToChange = str.size() - index - 1;
+                  if (!std::isalnum(nonPalindrome[index] + 1)) {
+                    nonPalindrome[indexToChange] = 'a';
+                  } else {
+                    nonPalindrome[indexToChange] = nonPalindrome[index] + 1;
+                  }
+                  return nonPalindrome;
+                });
+          });
+    });
   }
 };
 
