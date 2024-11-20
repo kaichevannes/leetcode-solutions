@@ -71,10 +71,10 @@ protected:
   }
 
   rc::Gen<std::string> genOddPalindrome() {
-    return rc::gen::mapcat(genEvenPalindrome(), [](std::string palindrome) {
-      return rc::gen::map<char>([palindrome](char middleLetter) {
+    return rc::gen::mapcat(genEvenPalindrome(), [this](std::string palindrome) {
+      return rc::gen::map<char>([this, palindrome](char middleLetter) {
         std::string oddPalindrome = palindrome;
-        int middleIndex = oddPalindrome.size() / 2;
+        int middleIndex = calcMiddleIndex(oddPalindrome);
         oddPalindrome.insert(oddPalindrome.begin() + middleIndex, middleLetter);
         return oddPalindrome;
       });
@@ -101,6 +101,8 @@ protected:
   }
 
 private:
+  int calcMiddleIndex(std::string str) { return str.size() / 2; }
+
   rc::Gen<char> genAlphaNumChar() {
     return rc::gen::suchThat(rc::gen::character<char>(),
                              [](char c) { return std::isalnum(c); });
@@ -122,23 +124,21 @@ private:
 
   rc::Gen<std::string> genNonPalindromeAlphaNum() {
     return rc::gen::withSize([this](int size) {
-      size = std::min(2, size);
-      return rc::gen::mapcat(
-          genAlphaNumString(size),
-          [](std::string alphaNumString) {
-            return rc::gen::map(
-                rc::gen::inRange<int>(0, alphaNumString.size() / 2), [alphaNumString](int index) {
-                  std::string nonPalindrome = alphaNumString;
-                  int indexToChange = alphaNumString.size() - index - 1;
-                  if (!std::isalnum(nonPalindrome[index] + 1)) {
-                    nonPalindrome[indexToChange] = 'a';
-                  } else {
-                    nonPalindrome[indexToChange] = nonPalindrome[index] + 1;
-                  }
-                  return nonPalindrome;
-                });
-          });
+      size = std::max(2, size);
+      return rc::gen::map(genAlphaNumString(size), unPalindrome);
     });
+  }
+
+  static std::string unPalindrome(std::string str) {
+    int index = 0;
+    std::string nonPalindrome = str;
+    int indexToChange = str.size() - index - 1;
+    if (!std::isalnum(nonPalindrome[index] + 1)) {
+      nonPalindrome[indexToChange] = 'a';
+    } else {
+      nonPalindrome[indexToChange] = nonPalindrome[index] + 1;
+    }
+    return nonPalindrome;
   }
 };
 
