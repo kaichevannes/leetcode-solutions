@@ -106,6 +106,10 @@ private:
                              [](char c) { return std::isalnum(c); });
   }
 
+  rc::Gen<std::string> genAlphaNumString(int length) {
+    return rc::gen::container<std::string>(length, genAlphaNumChar());
+  }
+
   rc::Gen<char> genSpecialChar() {
     return rc::gen::suchThat(rc::gen::inRange<char>(33, 127), [](char c) {
       return c != '\\' && !std::isalnum(c);
@@ -120,7 +124,7 @@ private:
     return rc::gen::withSize([this](int size) {
       size = std::min(2, size);
       return rc::gen::mapcat(
-          rc::gen::container<std::string>(size, genAlphaNumChar()),
+          genAlphaNumString(size),
           [](std::string str) {
             return rc::gen::map(
                 rc::gen::inRange<int>(0, str.size() / 2), [str](int index) {
