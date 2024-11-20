@@ -125,11 +125,11 @@ private:
       size = std::min(2, size);
       return rc::gen::mapcat(
           genAlphaNumString(size),
-          [](std::string str) {
+          [](std::string alphaNumString) {
             return rc::gen::map(
-                rc::gen::inRange<int>(0, str.size() / 2), [str](int index) {
-                  std::string nonPalindrome = str;
-                  int indexToChange = str.size() - index - 1;
+                rc::gen::inRange<int>(0, alphaNumString.size() / 2), [alphaNumString](int index) {
+                  std::string nonPalindrome = alphaNumString;
+                  int indexToChange = alphaNumString.size() - index - 1;
                   if (!std::isalnum(nonPalindrome[index] + 1)) {
                     nonPalindrome[indexToChange] = 'a';
                   } else {
