@@ -130,13 +130,12 @@ private:
   }
 
   static std::string unPalindrome(std::string str) {
-    int index = 0;
     std::string nonPalindrome = str;
-    int indexToChange = str.size() - index - 1;
-    if (!std::isalnum(nonPalindrome[index] + 1)) {
+    int indexToChange = str.size() - 1;
+    if (!std::isalnum(nonPalindrome[0] + 1)) {
       nonPalindrome[indexToChange] = 'a';
     } else {
-      nonPalindrome[indexToChange] = nonPalindrome[index] + 1;
+      nonPalindrome[indexToChange] = nonPalindrome[0] + 1;
     }
     return nonPalindrome;
   }
