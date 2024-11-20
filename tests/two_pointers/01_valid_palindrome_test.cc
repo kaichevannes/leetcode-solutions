@@ -69,8 +69,8 @@ protected:
   }
 
   rc::Gen<std::string> genOddPalindrome() {
-    return rc::gen::mapcat(genEvenPalindrome(), [this](std::string palindrome) {
-      return rc::gen::map<char>([this, palindrome](char middleLetter) {
+    return rc::gen::mapcat(genEvenPalindrome(), [=](std::string palindrome) {
+      return rc::gen::map<char>([=](char middleLetter) {
         std::string oddPalindrome = palindrome;
         int middleIndex = calcMiddleIndex(oddPalindrome);
         oddPalindrome.insert(oddPalindrome.begin() + middleIndex, middleLetter);
@@ -127,13 +127,15 @@ private:
     });
   }
 
-  static std::string unPalindrome(std::string str) {
-    std::string nonPalindrome = str;
-    nonPalindrome[str.size() - 1] = nonPalindrome[0] + 1;
-    if (!std::isalnum(nonPalindrome[0] + 1)) {
-      nonPalindrome[str.size() - 1] = 'a';
+  static std::string unPalindrome(std::string alphaNumStr) {
+    int lastCharIndex = alphaNumStr.size() - 1;
+    auto makeLastCharDifferentFromFirstChar =
+        [lastCharIndex](std::string &str) { str[lastCharIndex] = str[0] + 1; };
+    makeLastCharDifferentFromFirstChar(alphaNumStr);
+    if (!std::isalnum(alphaNumStr[lastCharIndex])) {
+      alphaNumStr[lastCharIndex] = 'a';
     }
-    return nonPalindrome;
+    return alphaNumStr;
   }
 };
 
