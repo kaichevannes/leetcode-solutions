@@ -61,14 +61,14 @@ protected:
 };
 
 RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
-                      MaxIntTargetAlwaysReturnsZero, ()) {
+                      ReturnsZeroWhenTargetIsMaximumInteger, ()) {
   target = INT_MAX;
   nums = defaultNums();
   RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == 0);
 }
 
 RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
-                      NumsSizeLargerThanTargetHasSolution, ()) {
+                      SolutionExistsWhenArraySizeExceedsTarget, ()) {
   target = *rc::gen::inRange(1, 50);
   std::vector<int> nums =
       *rc::gen::mapcat(rc::gen::inRange<int>(target, 100), [](int size) {
@@ -79,7 +79,7 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
 }
 
 RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
-                      NumsHasSolutionThenIncNumsHasSolution, ()) {
+                      PreservesSolutionWhenArrayElementsAreIncremented, ()) {
   target = defaultTarget();
   nums = defaultNums();
   RC_PRE(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
@@ -90,7 +90,7 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
 }
 
 RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
-                      NumsAllOnesThenResultIsTarget, ()) {
+                      ResultEqualsTargetWhenAllElementsAreOne, ()) {
   target = *rc::gen::inRange(1, 100);
   nums = *rc::gen::container<std::vector<int>>(rc::gen::just<int>(1));
   RC_PRE(nums.size() >= target);
@@ -99,7 +99,7 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
 }
 
 RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
-                      GivenSolutionSumOfNumsGreaterThanTarget, ()) {
+                      EnsuresArraySumExceedsTargetForValidSolution, ()) {
   target = defaultTarget();
   nums = defaultNums();
   RC_PRE(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
@@ -109,14 +109,14 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
 }
 
 RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
-                      TargetIsOneResultAlwaysOne, ()) {
+                      ReturnsOneWhenTargetIsOne, ()) {
   target = 1;
   nums = defaultNums();
   RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == 1);
 }
 
 RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
-                      ElementLargerThanTargetResultIsOne, ()) {
+                      ReturnsOneWhenElementExceedsTarget, ()) {
   target = defaultTarget();
   nums = defaultNums();
   nums.push_back(target + 1);
