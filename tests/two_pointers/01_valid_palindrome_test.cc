@@ -61,6 +61,8 @@ TEST_F(ValidPalindromeTest, FourLengthHalfPalindrome) {
 
 class ValidPalindromeTestProperty : public ValidPalindromeTest {
 protected:
+  ValidPalindromeTestProperty() : rng(std::random_device{}()) {}
+
   rc::Gen<std::string> genEvenPalindrome() {
     return rc::gen::map<std::string>(
         [this](std::string str) { return str + reverse(str); });
@@ -75,19 +77,18 @@ protected:
   }
 
   rc::Gen<std::string> genNonPalindrome() {
-    return rc::gen::mapcat(
-        genNonPalindromeAlphaNum(), [this](std::string palindrome) {
-          return rc::gen::map(
-              genSpecialString(), [palindrome, this](std::string specialChars) {
-                return interleaveSpecialChars(palindrome, specialChars);
-              });
-        });
+    return rc::gen::mapcat(genNonPalindromeAlphaNum(),
+                           [this](std::string palindrome) {
+                             return interleaveSpecialChars(palindrome);
+                           });
   }
 
 private:
-  int calcMiddleIndex(std::string str) { return str.size() / 2; }
+  std::mt19937 rng;
 
-  std::string reverse(std::string str) {
+  int calcMiddleIndex(const std::string &str) { return str.size() / 2; }
+
+  std::string reverse(const std::string &str) {
     return std::string(str.rbegin(), str.rend());
   }
 
@@ -101,8 +102,9 @@ private:
   }
 
   rc::Gen<char> genSpecialChar() {
-    return rc::gen::suchThat(rc::gen::inRange<char>(33, 127), [](char c) {
-      return c != '\\' && !std::isalnum(c);
+    auto isEscapeSequenceChar = [](char c){return c == '\\';};
+    return rc::gen::suchThat(rc::gen::inRange<char>(33, 127), [&](char c) {
+      return !isEscapeSequenceChar(c) && !std::isalnum(c);
     });
   }
 
@@ -113,26 +115,34 @@ private:
   rc::Gen<std::string> genNonPalindromeAlphaNum() {
     return rc::gen::withSize([this](int size) {
       size = std::max(2, size);
-      return rc::gen::map(genAlphaNumString(size), unPalindrome);
+      return rc::gen::map(genAlphaNumString(size),
+                          [this](std::string alphaNumericString) {
+                            return unPalindrome(alphaNumericString);
+                          });
     });
   }
 
-  std::string interleaveSpecialChars(std::string str,
-                                     std::string specialChars) {
+  rc::Gen<std::string> interleaveSpecialChars(const std::string &palindrome) {
+    return rc::gen::map(
+        genSpecialString(), [palindrome, this](const std::string &specialChars) {
+          return applySpecialCharInterleaving(palindrome, specialChars);
+        });
+  }
+
+  std::string applySpecialCharInterleaving(std::string str,
+                                           const std::string &specialChars) {
     for (char specialChar : specialChars) {
       str.insert(str.begin() + getRandomIndex(str), specialChar);
     }
     return str;
   }
 
-  int getRandomIndex(std::string str) {
-    std::random_device rd;
-    std::mt19937 rng(rd());
+  int getRandomIndex(const std::string &str) {
     std::uniform_int_distribution<int> dist(0, str.size() - 1);
     return dist(rng);
   }
 
-  static std::string unPalindrome(std::string alphaNumStr) {
+  std::string unPalindrome(std::string alphaNumStr) {
     int lastCharIndex = alphaNumStr.size() - 1;
     auto makeLastCharDifferentFromFirstChar =
         [lastCharIndex](std::string &str) { str[lastCharIndex] = str[0] + 1; };
