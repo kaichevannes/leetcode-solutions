@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <climits>
 #include <gtest/gtest.h>
+#include <numeric>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
@@ -75,21 +76,32 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
   RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
 }
 
-RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty, NumsHasSolutionThenIncNumsHasSolution, ()) {
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
+                      NumsHasSolutionThenIncNumsHasSolution, ()) {
   target = defaultTarget();
   nums = defaultNums();
   RC_PRE(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
 
-  std::transform(nums.begin(), nums.end(), nums.begin(), [](int val){
-    return val+1;
-  });
+  std::transform(nums.begin(), nums.end(), nums.begin(),
+                 [](int val) { return val + 1; });
   RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
 }
 
-RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty, NumsAllOnesThenResultIsTarget, ()) {
-  target = *rc::gen::inRange(1,100);
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
+                      NumsAllOnesThenResultIsTarget, ()) {
+  target = *rc::gen::inRange(1, 100);
   nums = *rc::gen::container<std::vector<int>>(rc::gen::just<int>(1));
   RC_PRE(nums.size() >= target);
 
   RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == target);
+}
+
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
+                      GivenSolutionSumOfNumsGreaterThanTarget, ()) {
+  target = defaultTarget();
+  nums = defaultNums();
+  RC_PRE(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
+
+  long long sum = std::accumulate(nums.begin(), nums.end(), 0LL);
+  RC_ASSERT(sum >= target);
 }
