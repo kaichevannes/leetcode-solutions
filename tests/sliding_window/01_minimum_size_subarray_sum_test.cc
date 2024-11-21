@@ -1,4 +1,5 @@
 #include "../../src/sliding_window/01_minimum_size_subarray_sum.h"
+#include <algorithm>
 #include <climits>
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
@@ -71,5 +72,16 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
         return rc::gen::container<std::vector<int>>(size,
                                                     rc::gen::positive<int>());
       });
+  RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
+}
+
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty, NumsHasSolutionThenIncNumsHasSolution, ()) {
+  target = defaultTarget();
+  nums = defaultNums();
+  RC_PRE(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
+
+  std::transform(nums.begin(), nums.end(), nums.begin(), [](int val){
+    return val+1;
+  });
   RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
 }
