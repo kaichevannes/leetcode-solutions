@@ -62,19 +62,15 @@ TEST_F(ValidPalindromeTest, FourLengthHalfPalindrome) {
 class ValidPalindromeTestProperty : public ValidPalindromeTest {
 protected:
   rc::Gen<std::string> genEvenPalindrome() {
-    return rc::gen::map<std::string>([](std::string firstHalf) {
-      std::string secondHalf(firstHalf.rbegin(), firstHalf.rend());
-      return firstHalf + secondHalf;
+    return rc::gen::map<std::string>([this](std::string str) {
+      return str + reverse(str);
     });
   }
 
   rc::Gen<std::string> genOddPalindrome() {
-    return rc::gen::mapcat(genEvenPalindrome(), [=](std::string palindrome) {
-      return rc::gen::map<char>([=](char middleLetter) {
-        std::string oddPalindrome = palindrome;
-        int middleIndex = calcMiddleIndex(oddPalindrome);
-        oddPalindrome.insert(oddPalindrome.begin() + middleIndex, middleLetter);
-        return oddPalindrome;
+    return rc::gen::mapcat(genEvenPalindrome(), [this](std::string str) {
+      return rc::gen::map<char>([str, this](char middleLetter) {
+        return str + middleLetter + reverse(str);
       });
     });
   }
@@ -100,6 +96,10 @@ protected:
 
 private:
   int calcMiddleIndex(std::string str) { return str.size() / 2; }
+
+  std::string reverse(std::string str) {
+    return std::string(str.rbegin(), str.rend());
+  }
 
   rc::Gen<char> genAlphaNumChar() {
     return rc::gen::suchThat(rc::gen::character<char>(),
