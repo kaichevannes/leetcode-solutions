@@ -54,7 +54,9 @@ protected:
   int defaultTarget() { return *rc::gen::positive<int>(); }
 
   std::vector<int> defaultNums() {
-    return *rc::gen::container<std::vector<int>>(rc::gen::positive<int>());
+    return *rc::gen::suchThat(
+        rc::gen::container<std::vector<int>>(rc::gen::positive<int>()),
+        [](std::vector<int> vec) { return vec.size() > 0; });
   }
 };
 
@@ -104,4 +106,11 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
 
   long long sum = std::accumulate(nums.begin(), nums.end(), 0LL);
   RC_ASSERT(sum >= target);
+}
+
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
+                      TargetIsOneResultAlwaysOne, ()) {
+  target = 1;
+  nums = defaultNums();
+  RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == 1);
 }
