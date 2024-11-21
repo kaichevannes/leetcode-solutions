@@ -85,3 +85,11 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty, NumsHasSolutionThenInc
   });
   RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
 }
+
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty, NumsAllOnesThenResultIsTarget, ()) {
+  target = *rc::gen::inRange(1,100);
+  nums = *rc::gen::container<std::vector<int>>(rc::gen::just<int>(1));
+  RC_PRE(nums.size() >= target);
+
+  RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == target);
+}
