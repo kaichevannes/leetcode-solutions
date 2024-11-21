@@ -77,10 +77,10 @@ protected:
   rc::Gen<std::string> genNonPalindrome() {
     return rc::gen::mapcat(
         genNonPalindromeAlphaNum(), [this](std::string palindrome) {
-          return rc::gen::map(genSpecialString(),
-                              [palindrome, this](std::string specialChars) {
-                              return interleaveSpecialChars(palindrome, specialChars);
-                              });
+          return rc::gen::map(
+              genSpecialString(), [palindrome, this](std::string specialChars) {
+                return interleaveSpecialChars(palindrome, specialChars);
+              });
         });
   }
 
@@ -119,14 +119,17 @@ private:
 
   std::string interleaveSpecialChars(std::string str,
                                      std::string specialChars) {
-    std::string finalPalindrome = str;
     for (char specialChar : specialChars) {
-      std::random_device rd;
-      std::mt19937 rng(rd());
-      std::uniform_int_distribution<int> dist(0, str.size() - 1);
-      finalPalindrome.insert(finalPalindrome.begin() + dist(rng), specialChar);
+      str.insert(str.begin() + getRandomIndex(str), specialChar);
     }
-    return finalPalindrome;
+    return str;
+  }
+
+  int getRandomIndex(std::string str) {
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    std::uniform_int_distribution<int> dist(0, str.size() - 1);
+    return dist(rng);
   }
 
   static std::string unPalindrome(std::string alphaNumStr) {
