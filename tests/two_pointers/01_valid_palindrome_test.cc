@@ -62,9 +62,8 @@ TEST_F(ValidPalindromeTest, FourLengthHalfPalindrome) {
 class ValidPalindromeTestProperty : public ValidPalindromeTest {
 protected:
   rc::Gen<std::string> genEvenPalindrome() {
-    return rc::gen::map<std::string>([this](std::string str) {
-      return str + reverse(str);
-    });
+    return rc::gen::map<std::string>(
+        [this](std::string str) { return str + reverse(str); });
   }
 
   rc::Gen<std::string> genOddPalindrome() {
@@ -78,19 +77,10 @@ protected:
   rc::Gen<std::string> genNonPalindrome() {
     return rc::gen::mapcat(
         genNonPalindromeAlphaNum(), [this](std::string palindrome) {
-          return rc::gen::map(
-              genSpecialString(), [palindrome](std::string specialChars) {
-                std::string finalPalindrome = palindrome;
-                for (char specialChar : specialChars) {
-                  std::random_device rd;
-                  std::mt19937 rng(rd());
-                  std::uniform_int_distribution<int> dist(0, palindrome.size() -
-                                                                 1);
-                  finalPalindrome.insert(finalPalindrome.begin() + dist(rng),
-                                         specialChar);
-                }
-                return finalPalindrome;
-              });
+          return rc::gen::map(genSpecialString(),
+                              [palindrome, this](std::string specialChars) {
+                              return interleaveSpecialChars(palindrome, specialChars);
+                              });
         });
   }
 
@@ -127,10 +117,23 @@ private:
     });
   }
 
+  std::string interleaveSpecialChars(std::string str,
+                                     std::string specialChars) {
+    std::string finalPalindrome = str;
+    for (char specialChar : specialChars) {
+      std::random_device rd;
+      std::mt19937 rng(rd());
+      std::uniform_int_distribution<int> dist(0, str.size() - 1);
+      finalPalindrome.insert(finalPalindrome.begin() + dist(rng), specialChar);
+    }
+    return finalPalindrome;
+  }
+
   static std::string unPalindrome(std::string alphaNumStr) {
     int lastCharIndex = alphaNumStr.size() - 1;
     auto makeLastCharDifferentFromFirstChar =
         [lastCharIndex](std::string &str) { str[lastCharIndex] = str[0] + 1; };
+
     makeLastCharDifferentFromFirstChar(alphaNumStr);
     if (!std::isalnum(alphaNumStr[lastCharIndex])) {
       alphaNumStr[lastCharIndex] = 'a';
