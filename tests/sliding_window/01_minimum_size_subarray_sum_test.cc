@@ -1,5 +1,4 @@
 #include "../../src/sliding_window/01_minimum_size_subarray_sum.h"
-#include <algorithm>
 #include <climits>
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
@@ -50,11 +49,27 @@ TEST_F(MinimumSizeSubArraySumTest, ContiguousSubArray) {
 
 class MinimumSizeSubArraySumTestProperty : public MinimumSizeSubArraySumTest {
 protected:
-  int target = *rc::gen::positive<int>();
-  std::vector<int> nums = *rc::gen::positive<std::vector<int>>();
+  int defaultTarget() { return *rc::gen::positive<int>(); }
+
+  std::vector<int> defaultNums() {
+    return *rc::gen::container<std::vector<int>>(rc::gen::positive<int>());
+  }
 };
 
-RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty, MaxIntTargetAlwaysReturnsZero, ()) {
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
+                      MaxIntTargetAlwaysReturnsZero, ()) {
   target = INT_MAX;
-  RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == 0); 
+  nums = defaultNums();
+  RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == 0);
+}
+
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
+                      NumsSizeLargerThanTargetHasSolution, ()) {
+  target = *rc::gen::inRange(1, 50);
+  std::vector<int> nums =
+      *rc::gen::mapcat(rc::gen::inRange<int>(target, 100), [](int size) {
+        return rc::gen::container<std::vector<int>>(size,
+                                                    rc::gen::positive<int>());
+      });
+  RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) != 0);
 }
