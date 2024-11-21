@@ -114,3 +114,11 @@ RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
   nums = defaultNums();
   RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == 1);
 }
+
+RC_GTEST_FIXTURE_PROP(MinimumSizeSubArraySumTestProperty,
+                      ElementLargerThanTargetResultIsOne, ()) {
+  target = defaultTarget();
+  nums = defaultNums();
+  nums.push_back(target + 1);
+  RC_ASSERT(minimumSizeSubArraySum.minSubArrayLen(target, nums) == 1);
+}
