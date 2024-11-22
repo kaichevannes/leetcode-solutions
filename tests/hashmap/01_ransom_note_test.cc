@@ -1,5 +1,7 @@
 #include "../../src/hashmap/01_ransom_note.h"
+#include <algorithm>
 #include <gtest/gtest.h>
+#include <random>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
@@ -89,4 +91,15 @@ RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, TrueWhenRansomIsMagazine, ()) {
 
   RC_ASSERT(ransomNote.canConstruct(ransom, magazine));
   RC_ASSERT(ransomNote.canConstruct(magazine, ransom));
+}
+
+RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, TrueWhenMagazineSupersetOfRansom,
+                      ()) {
+  ransom = *genLowerCaseString();
+  magazine = ransom + *genLowerCaseString();
+
+  auto rng = std::mt19937{std::random_device{}()};
+  std::shuffle(magazine.begin(), magazine.end(), rng);
+
+  RC_ASSERT(ransomNote.canConstruct(ransom, magazine));
 }
