@@ -62,6 +62,8 @@ TEST_F(RansomNoteTest, sortedRansomAndMagazineDontLineUp) {
 
 class RansomNoteTestProperty : public RansomNoteTest {
 protected:
+  std::mt19937 rng{std::random_device{}()};
+
   rc::Gen<std::string> genLowerCaseString() {
     return rc::gen::suchThat(
         rc::gen::container<std::string>(genLowerCaseEnglishLetter()),
@@ -98,7 +100,37 @@ RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, TrueWhenMagazineSupersetOfRansom,
   ransom = *genLowerCaseString();
   magazine = ransom + *genLowerCaseString();
 
-  auto rng = std::mt19937{std::random_device{}()};
+  std::shuffle(magazine.begin(), magazine.end(), rng);
+
+  RC_ASSERT(ransomNote.canConstruct(ransom, magazine));
+}
+
+RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, TrueAfterShufflingMagazine, ()) {
+  ransom = *genLowerCaseString();
+  magazine = *genLowerCaseString();
+  RC_PRE(ransomNote.canConstruct(ransom, magazine));
+
+  std::shuffle(magazine.begin(), magazine.end(), rng);
+
+  RC_ASSERT(ransomNote.canConstruct(ransom, magazine));
+}
+
+RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, TrueAfterShufflingRansom, ()) {
+  ransom = *genLowerCaseString();
+  magazine = *genLowerCaseString();
+  RC_PRE(ransomNote.canConstruct(ransom, magazine));
+
+  std::shuffle(ransom.begin(), ransom.end(), rng);
+
+  RC_ASSERT(ransomNote.canConstruct(ransom, magazine));
+}
+
+RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, TrueAfterShufflingRansomAndMagazine, ()) {
+  ransom = *genLowerCaseString();
+  magazine = *genLowerCaseString();
+  RC_PRE(ransomNote.canConstruct(ransom, magazine));
+
+  std::shuffle(ransom.begin(), ransom.end(), rng);
   std::shuffle(magazine.begin(), magazine.end(), rng);
 
   RC_ASSERT(ransomNote.canConstruct(ransom, magazine));
