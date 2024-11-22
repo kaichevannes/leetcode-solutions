@@ -14,6 +14,11 @@ TEST_F(SummaryRangesTest, EmptyNums) {
   EXPECT_EQ(std::vector<std::string>({}), summaryRanges.summaryRanges(nums));
 }
 
+TEST_F(SummaryRangesTest, ConsecutiveNumbers) {
+  nums = {0, 1, 2};
+  EXPECT_EQ(std::vector<std::string>({"0->2"}), summaryRanges.summaryRanges(nums));
+}
+
 class SummaryRangesTestProperty : public SummaryRangesTest {
 protected:
   rc::Gen<std::vector<int>> genUniqueIntVector() {
@@ -21,6 +26,8 @@ protected:
   }
 };
 
-// RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, ) {
-//
-// }
+RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, SolutionSizeIsLessThanNums, ()) {
+  nums = *genUniqueIntVector();
+  RC_ASSERT(summaryRanges.summaryRanges(nums).size() <= nums.size());
+}
+
