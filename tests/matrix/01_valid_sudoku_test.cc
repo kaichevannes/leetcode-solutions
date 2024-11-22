@@ -1,6 +1,7 @@
 #include "../../src/matrix/01_valid_sudoku.h"
 #include <algorithm>
 #include <gtest/gtest.h>
+#include <random>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
@@ -181,12 +182,33 @@ RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
   RC_ASSERT(validSudoku.isValidSudoku(board));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterReversingRows, ()) {
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingLeftToRight, ()) {
   auto board = defaultBoard();
   RC_PRE(validSudoku.isValidSudoku(board));
 
   for (std::vector<char> &row : board) {
     std::reverse(row.begin(), row.end());
+  }
+
+  RC_ASSERT(validSudoku.isValidSudoku(board));
+}
+
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingTopToBottom, ()) {
+  auto board = defaultBoard();
+  RC_PRE(validSudoku.isValidSudoku(board));
+
+  std::reverse(board.begin(), board.end());
+
+  RC_ASSERT(validSudoku.isValidSudoku(board));
+}
+
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterShufflingRowsWithinBand, ()) {
+  auto board = defaultBoard();
+  RC_PRE(validSudoku.isValidSudoku(board));
+
+  for (int band = 0; band < 3; band++) {
+    auto rng = std::default_random_engine {};
+    std::shuffle(board.begin() + band * 3, board.begin() + (band + 1) * 3, rng);
   }
 
   RC_ASSERT(validSudoku.isValidSudoku(board));
