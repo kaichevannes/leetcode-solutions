@@ -6,30 +6,31 @@
 struct Range {
   int start;
   int end;
-
-  static Range from(int num) { return Range{num, num}; }
 };
 
-std::vector<Range> buildRanges(std::vector<int> &nums) {
+std::vector<Range> buildRanges(const std::vector<int> &nums) {
   std::vector<Range> ranges;
 
-  auto extendsLatestRange = [&](int num) {
-    return !ranges.empty() && num == ranges.back().end + 1;
+  auto isConsecutiveWithCurrentRange = [&](int num) -> bool {
+    return num == ranges.back().end + 1;
   };
+  auto extendCurrentRange = [&](int num) { ranges.back().end += 1; };
+  auto startNewRange = [&](int num) { ranges.emplace_back(Range{num, num}); };
 
   for (int num : nums) {
-    if (extendsLatestRange(num)) {
-      ranges.back().end += 1;
+    if (!ranges.empty() && isConsecutiveWithCurrentRange(num)) {
+      extendCurrentRange(num);
     } else {
-      ranges.push_back(Range::from(num));
+      startNewRange(num);
     }
   }
 
   return ranges;
 }
 
-std::vector<std::string> convertRangesToStrings(std::vector<Range> &ranges) {
-  auto rangeToString = [](Range range) {
+std::vector<std::string>
+convertRangesToStrings(const std::vector<Range> &ranges) {
+  auto rangeToString = [](const Range &range) {
     if (range.start == range.end) {
       return std::format("{}", range.start);
     }
