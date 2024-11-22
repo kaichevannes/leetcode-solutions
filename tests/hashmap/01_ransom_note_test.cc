@@ -1,5 +1,7 @@
 #include "../../src/hashmap/01_ransom_note.h"
 #include <gtest/gtest.h>
+#include <rapidcheck.h>
+#include <rapidcheck/gtest.h>
 
 class RansomNoteTest : public testing::Test {
 protected:
@@ -56,3 +58,22 @@ TEST_F(RansomNoteTest, sortedRansomAndMagazineDontLineUp) {
   EXPECT_TRUE(ransomNote.canConstruct(ransom, magazine));
 }
 
+class RansomNoteTestProperty : public RansomNoteTest {
+protected:
+  rc::Gen<std::string> genLowerCaseString() {
+    return rc::gen::container<std::string>(genLowerCaseEnglishLetter());
+  }
+
+private:
+  rc::Gen<char> genLowerCaseEnglishLetter() {
+    return rc::gen::inRange<char>(97,122);
+  }
+};
+
+RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, FalseWhenMagazineSmallerThanRansom, ()) {
+  ransom = *genLowerCaseString();
+  magazine = *genLowerCaseString();
+  RC_PRE(magazine.size() < ransom.size());
+
+  RC_ASSERT_FALSE(ransomNote.canConstruct(ransom, magazine));
+}
