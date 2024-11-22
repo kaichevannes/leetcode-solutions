@@ -51,11 +51,11 @@ TEST_F(MinimumSizeSubArraySumTest, ContiguousSubArray) {
 
 class MinimumSizeSubArraySumTestProperty : public MinimumSizeSubArraySumTest {
 protected:
-  int defaultTarget() { return *rc::gen::positive<int>(); }
+  int defaultTarget() { return *rc::gen::inRange(1,100000); }
 
   std::vector<int> defaultNums() {
     return *rc::gen::suchThat(
-        rc::gen::container<std::vector<int>>(rc::gen::positive<int>()),
+        rc::gen::container<std::vector<int>>(rc::gen::inRange(1,10000)),
         [](std::vector<int> vec) { return vec.size() > 0; });
   }
 };
