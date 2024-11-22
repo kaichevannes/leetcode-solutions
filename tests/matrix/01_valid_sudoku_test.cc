@@ -148,18 +148,24 @@ TEST_F(ValidSudokuTest, ValidSudoku) {
 
 class ValidSudokuTestProperty : public ValidSudokuTest {
 protected:
+  std::vector<char> nonEmptyCellValues{'1', '2', '3', '4', '5',
+                                       '6', '7', '8', '9'};
+
   std::vector<std::vector<char>> defaultBoard() {
-    return *rc::gen::container<std::vector<std::vector<char>>>(
-        9, rc::gen::container<std::vector<char>>(9, genCellChar()));
+    return *genBoard(genCellChar());
+  }
+
+  rc::Gen<std::vector<std::vector<char>>>
+  genBoard(const rc::Gen<char> &cellChar) {
+    return rc::gen::container<std::vector<std::vector<char>>>(
+        9, rc::gen::container<std::vector<char>>(9, cellChar));
   }
 
 private:
   rc::Gen<char> genCellChar() {
-    std::vector<char> validCellValues{'1', '2', '3', '4',
-                                      '5', '6', '7', '8', '9'};
     return rc::gen::weightedOneOf<char>(
         {{5, rc::gen::just<char>('.')},
-         {1, rc::gen::elementOf(validCellValues)}});
+         {1, rc::gen::elementOf(nonEmptyCellValues)}});
   }
 };
 
@@ -182,7 +188,8 @@ RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
   RC_ASSERT(validSudoku.isValidSudoku(board));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingLeftToRight, ()) {
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingLeftToRight,
+                      ()) {
   auto board = defaultBoard();
   RC_PRE(validSudoku.isValidSudoku(board));
 
@@ -193,7 +200,8 @@ RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingLeftToRight, ()
   RC_ASSERT(validSudoku.isValidSudoku(board));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingTopToBottom, ()) {
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingTopToBottom,
+                      ()) {
   auto board = defaultBoard();
   RC_PRE(validSudoku.isValidSudoku(board));
 
@@ -202,14 +210,34 @@ RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingTopToBottom, ()
   RC_ASSERT(validSudoku.isValidSudoku(board));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterShufflingRowsWithinBand, ()) {
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
+                      ValidAfterShufflingRowsInEachThreeRowBlock, ()) {
   auto board = defaultBoard();
   RC_PRE(validSudoku.isValidSudoku(board));
 
   for (int band = 0; band < 3; band++) {
-    auto rng = std::default_random_engine {};
+    auto rng = std::mt19937{std::random_device{}()};
     std::shuffle(board.begin() + band * 3, board.begin() + (band + 1) * 3, rng);
   }
 
   RC_ASSERT(validSudoku.isValidSudoku(board));
+}
+
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
+                      InvalidWhenMoreThanNineOfTheSameNumber, ()) {
+  char value = *rc::gen::elementOf(nonEmptyCellValues);
+  auto board =
+      *genBoard(rc::gen::oneOf<char>(rc::gen::just('.'),
+      rc::gen::just(value)));
+
+  int totalNonEmptyElements = 0;
+  for (std::vector<char> row : board) {
+    totalNonEmptyElements +=
+        std::accumulate(row.begin(), row.end(), 0, [](int sum, char c) {
+          return sum + (c == '.' ? 0 : 1);
+        });
+  }
+  RC_PRE(totalNonEmptyElements > 9);
+
+  RC_ASSERT(!validSudoku.isValidSudoku(board));
 }
