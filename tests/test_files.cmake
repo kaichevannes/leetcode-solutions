@@ -17,3 +17,7 @@ set(SLIDING_WINDOW_TEST_FILES
 set(TWO_POINTERS_TEST_FILES
   two_pointers/01_valid_palindrome_test.cc
 )
+
+set(INTERVALS_TEST_FILES
+  intervals/01_summary_ranges_test.cc
+)

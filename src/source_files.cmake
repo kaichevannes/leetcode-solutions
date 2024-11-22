@@ -17,3 +17,7 @@ set(SLIDING_WINDOW_SOURCE_FILES
 set(TWO_POINTERS_SOURCE_FILES
   two_pointers/01_valid_palindrome.cc
 )
+
+set(INTERVALS_SOURCE_FILES
+  intervals/01_summary_ranges.cc
+)
