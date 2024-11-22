@@ -10,25 +10,39 @@ protected:
   std::vector<int> nums;
 };
 
-TEST_F(SummaryRangesTest, EmptyNums) {
+TEST_F(SummaryRangesTest, ReturnsEmptyListWhenInputIsEmpty) {
   nums = {};
   EXPECT_EQ(std::vector<std::string>({}), summaryRanges.summaryRanges(nums));
 }
 
-TEST_F(SummaryRangesTest, ConsecutiveNumbers) {
+TEST_F(SummaryRangesTest, GroupsConsecutiveNumbersIntoSingleRange) {
   nums = {0, 1, 2};
   EXPECT_EQ(std::vector<std::string>({"0->2"}),
             summaryRanges.summaryRanges(nums));
 }
 
-TEST_F(SummaryRangesTest, SingleNumber) {
+TEST_F(SummaryRangesTest, ReturnsSingleNumberAsIndividualRange) {
   nums = {0};
   EXPECT_EQ(std::vector<std::string>({"0"}), summaryRanges.summaryRanges(nums));
 }
 
-TEST_F(SummaryRangesTest, SingleNegativeNumber) {
+TEST_F(SummaryRangesTest, ReturnsSingleNegativeNumberAsIndividualRange) {
   nums = {-1};
-  EXPECT_EQ(std::vector<std::string>({"-1"}), summaryRanges.summaryRanges(nums));
+  EXPECT_EQ(std::vector<std::string>({"-1"}),
+            summaryRanges.summaryRanges(nums));
+}
+
+TEST_F(SummaryRangesTest, GroupsListWithSeparatedNumbersIntoMultipleRanges) {
+  nums = {0, 1, 2, 4, 5, 7};
+  EXPECT_EQ(std::vector<std::string>({"0->2", "4->5", "7"}),
+            summaryRanges.summaryRanges(nums));
+}
+
+TEST_F(SummaryRangesTest, HandlesMaximumSizeInput) {
+  nums = {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1,
+          0,   1,  2,  3,  4,  5,  6,  7,  8,  9};
+  EXPECT_EQ(std::vector<std::string>({"-10->9"}),
+            summaryRanges.summaryRanges(nums));
 }
 
 class SummaryRangesTestProperty : public SummaryRangesTest {
@@ -43,10 +57,8 @@ protected:
   std::pair<int, int> parseRange(std::string range) {
     assert(range.size() > 1);
 
-    RC_LOG() << "parsing " << range << std::endl;
     auto pos = range.find("->");
     int start = std::stoi(range.substr(0, pos));
-    RC_LOG() << "start = " << start << std::endl;
     int end = std::stoi(range.substr(pos + 2));
 
     return {start, end};
@@ -62,17 +74,17 @@ private:
   }
 };
 
-RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, SolutionSizeIsLessThanNums,
-                      ()) {
+RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty,
+                      OutputSizeIsNoGreaterThanInputSize, ()) {
   nums = *genNums();
   RC_ASSERT(summaryRanges.summaryRanges(nums).size() <= nums.size());
 }
 
-RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, RangesAreValid, ()) {
+RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, ProducesValidRanges, ()) {
   nums = *genNums();
   std::vector<std::string> ranges = summaryRanges.summaryRanges(nums);
 
-  for (std::string range : ranges) {
+  for (const std::string &range : ranges) {
     if (!isRange(range))
       continue;
 
@@ -82,20 +94,21 @@ RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, RangesAreValid, ()) {
   }
 }
 
-RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, RangesBelongToNums, ()) {
+RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty,
+                      AllNumbersWithinOutputRangesBelongToInput, ()) {
   nums = *genNums();
   std::vector<std::string> ranges = summaryRanges.summaryRanges(nums);
 
   for (std::string range : ranges) {
     if (!isRange(range)) {
-      RC_ASSERT(std::find(nums.begin(), nums.end(), std::stoi(range)) != nums.end());
-      continue;
-    }
+      RC_ASSERT(std::find(nums.begin(), nums.end(), std::stoi(range)) !=
+                nums.end());
+    } else {
+      auto [start, end] = parseRange(range);
 
-    auto [start, end] = parseRange(range);
-
-    for (int i = start; i < end; i ++) {
-      RC_ASSERT(std::find(nums.begin(), nums.end(), i) != nums.end());
+      for (int i = start; i <= end; i++) {
+        RC_ASSERT(std::find(nums.begin(), nums.end(), i) != nums.end());
+      }
     }
   }
 }
