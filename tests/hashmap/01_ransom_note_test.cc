@@ -61,19 +61,32 @@ TEST_F(RansomNoteTest, sortedRansomAndMagazineDontLineUp) {
 class RansomNoteTestProperty : public RansomNoteTest {
 protected:
   rc::Gen<std::string> genLowerCaseString() {
-    return rc::gen::container<std::string>(genLowerCaseEnglishLetter());
+    return rc::gen::suchThat(
+        rc::gen::container<std::string>(genLowerCaseEnglishLetter()),
+        [](std::string str) {
+          return str.size() >= 1 && str.size() <= 100000;
+        });
   }
 
 private:
   rc::Gen<char> genLowerCaseEnglishLetter() {
-    return rc::gen::inRange<char>(97,122);
+    return rc::gen::inRange<char>(97, 122);
   }
 };
 
-RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, FalseWhenMagazineSmallerThanRansom, ()) {
+RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty,
+                      FalseWhenMagazineSmallerThanRansom, ()) {
   ransom = *genLowerCaseString();
   magazine = *genLowerCaseString();
   RC_PRE(magazine.size() < ransom.size());
 
   RC_ASSERT_FALSE(ransomNote.canConstruct(ransom, magazine));
+}
+
+RC_GTEST_FIXTURE_PROP(RansomNoteTestProperty, TrueWhenRansomIsMagazine, ()) {
+  ransom = *genLowerCaseString();
+  magazine = ransom;
+
+  RC_ASSERT(ransomNote.canConstruct(ransom, magazine));
+  RC_ASSERT(ransomNote.canConstruct(magazine, ransom));
 }
