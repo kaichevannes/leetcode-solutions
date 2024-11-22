@@ -1,5 +1,8 @@
 #include "../../src/matrix/01_valid_sudoku.h"
+#include <algorithm>
 #include <gtest/gtest.h>
+#include <rapidcheck.h>
+#include <rapidcheck/gtest.h>
 
 class ValidSudokuTest : public testing::Test {
 protected:
@@ -140,4 +143,51 @@ TEST_F(ValidSudokuTest, ValidSudoku) {
       {'.', '.', '.', '.', '8', '.', '.', '7', '9'},
   };
   EXPECT_TRUE(validSudoku.isValidSudoku(board));
+}
+
+class ValidSudokuTestProperty : public ValidSudokuTest {
+protected:
+  std::vector<std::vector<char>> defaultBoard() {
+    return *rc::gen::container<std::vector<std::vector<char>>>(
+        9, rc::gen::container<std::vector<char>>(9, genCellChar()));
+  }
+
+private:
+  rc::Gen<char> genCellChar() {
+    std::vector<char> validCellValues{'1', '2', '3', '4',
+                                      '5', '6', '7', '8', '9'};
+    return rc::gen::weightedOneOf<char>(
+        {{5, rc::gen::just<char>('.')},
+         {1, rc::gen::elementOf(validCellValues)}});
+  }
+};
+
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
+                      ValidAfterIncrementingNonEmptyCells, ()) {
+  auto board = defaultBoard();
+  RC_PRE(validSudoku.isValidSudoku(board));
+
+  auto incrementCellValue = [](char c) -> char {
+    if (c == '.') {
+      return '.';
+    }
+    return c == '9' ? '1' : c + 1;
+  };
+
+  for (std::vector<char> &row : board) {
+    std::transform(row.begin(), row.end(), row.begin(), incrementCellValue);
+  }
+
+  RC_ASSERT(validSudoku.isValidSudoku(board));
+}
+
+RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterReversingRows, ()) {
+  auto board = defaultBoard();
+  RC_PRE(validSudoku.isValidSudoku(board));
+
+  for (std::vector<char> &row : board) {
+    std::reverse(row.begin(), row.end());
+  }
+
+  RC_ASSERT(validSudoku.isValidSudoku(board));
 }

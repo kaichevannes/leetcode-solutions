@@ -1,6 +1,7 @@
 #include "01_valid_sudoku.h"
 #include <cassert>
 #include <cctype>
+#include <iostream>
 #include <unordered_set>
 
 constexpr int GRID_SIZE = 9;
@@ -33,6 +34,9 @@ private:
   std::vector<std::vector<char>> board;
 
   int number(Cell cell) const {
+    if (!std::isdigit(board[cell.row][cell.col])) {
+      std::cerr << "board[cell.row][cell.col] = [" << board[cell.row][cell.col] << "]" << std::endl;
+    }
     assert(std::isdigit(board[cell.row][cell.col]));
     return board[cell.row][cell.col] - '0';
   }
