@@ -8,16 +8,19 @@ bool ValidParentheses::isValid(std::string s) {
 
   std::unordered_map<char, char> openingParenthesisFor = {
       {')', '('}, {'}', '{'}, {']', '['}};
+  std::stack<char> unmatchedParentheses;
 
-  std::stack<char> parens;
+  auto closesOpenedParenthesis = [&](char c) {
+    return openingParenthesisFor[c] == unmatchedParentheses.top();
+  };
 
   for (char c : s) {
-    if (parens.size() > 0 && openingParenthesisFor[c] == parens.top()) {
-      parens.pop();
+    if (!unmatchedParentheses.empty() && closesOpenedParenthesis(c)) {
+      unmatchedParentheses.pop();
     } else {
-      parens.push(c);
+      unmatchedParentheses.push(c);
     }
   }
 
-  return parens.empty();
+  return unmatchedParentheses.empty();
 }
