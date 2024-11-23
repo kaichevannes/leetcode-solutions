@@ -21,3 +21,7 @@ set(TWO_POINTERS_TEST_FILES
 set(INTERVALS_TEST_FILES
   intervals/01_summary_ranges_test.cc
 )
+
+set(STACK_TEST_FILES
+  stack/01_valid_parentheses_test.cc
+)

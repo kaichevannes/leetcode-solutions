@@ -21,3 +21,7 @@ set(TWO_POINTERS_SOURCE_FILES
 set(INTERVALS_SOURCE_FILES
   intervals/01_summary_ranges.cc
 )
+
+set(STACK_SOURCE_FILES
+  stack/01_valid_parentheses.cc
+)
