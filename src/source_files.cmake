@@ -25,3 +25,7 @@ set(INTERVALS_SOURCE_FILES
 set(STACK_SOURCE_FILES
   stack/01_valid_parentheses.cc
 )
+
+set(LINKED_LIST_SOURCE_FILES
+  linked_list/01_linked_list_cycle.cc
+)

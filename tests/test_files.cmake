@@ -25,3 +25,7 @@ set(INTERVALS_TEST_FILES
 set(STACK_TEST_FILES
   stack/01_valid_parentheses_test.cc
 )
+
+set(LINKED_LIST_TEST_FILES
+  linked_list/01_linked_list_cycle_test.cc
+)
