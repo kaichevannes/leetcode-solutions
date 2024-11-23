@@ -11,11 +11,11 @@ bool ValidParentheses::isValid(std::string s) {
 
   std::stack<char> parens;
 
-  for (int i = 0; i < s.size(); i++) {
-    if (parens.size() > 0 && openingParenthesisFor[s[i]] == parens.top()) {
+  for (char c : s) {
+    if (parens.size() > 0 && openingParenthesisFor[c] == parens.top()) {
       parens.pop();
     } else {
-      parens.push(s[i]);
+      parens.push(c);
     }
   }
 
