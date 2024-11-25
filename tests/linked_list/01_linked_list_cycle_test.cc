@@ -3,6 +3,10 @@
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
+void PrintTo(const ListNode* node, std::ostream* os) {
+  *os << "Node(" << node->val << ")";
+}
+
 class LinkedListCycleTest : public testing::Test {
 protected:
   LinkedListCycle linkedListCycle;
@@ -21,19 +25,25 @@ TEST_F(LinkedListCycleTest, TrueForSmallestCycle) {
   EXPECT_TRUE(linkedListCycle.hasCycle(&head));
 }
 
-// namespace rc {
-//
-// template <> struct Arbitrary<ListNode> {
-//   static Gen<ListNode> arbitrary() {
-//     return gen::build<ListNode>(gen::set(&ListNode::val),
-//                                 gen::set(&ListNode::next, gen::just(-1)));
-//   }
-// };
-// } // namespace rc
-//
-// class LinkedListCycleTestProperty : public LinkedListCycleTest {
-// protected:
-//
-// };
+namespace rc {
 
-// RC_GTEST_FIXTURE_PROP(LinkedListCycleTestProperty, )
+class LinkedListCycleTestProperty : public LinkedListCycleTest {
+protected:
+  Gen<ListNode> genEndNode() {
+    return gen::construct<ListNode>(gen::arbitrary<int>());
+  }
+
+  Gen<ListNode> genTerminatingLinkedList() {
+    return gen::mapcat(genEndNode(), [this](ListNode node) {
+      return gen::weightedOneOf<ListNode>(
+          {{8, genTerminatingLinkedList()}, {2, gen::just(node)}});
+    });
+  }
+};
+
+RC_GTEST_FIXTURE_PROP(LinkedListCycleTestProperty, Test, ()) {
+  ListNode head = *genTerminatingLinkedList();
+  RC_ASSERT(linkedListCycle.hasCycle(&head));
+}
+
+} // namespace rc
