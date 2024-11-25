@@ -1,4 +1,4 @@
-#include "../../src/array_string/01_merge_sorted_array.h"
+#include "array_string/01_merge_sorted_array.h"
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <rapidcheck.h>

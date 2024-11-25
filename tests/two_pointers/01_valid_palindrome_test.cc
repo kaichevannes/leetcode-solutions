@@ -1,4 +1,4 @@
-#include "../../src/two_pointers/01_valid_palindrome.h"
+#include "two_pointers/01_valid_palindrome.h"
 #include <gtest/gtest.h>
 #include <random>
 #include <rapidcheck.h>

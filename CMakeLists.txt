@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Config
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Include
+include_directories(${PROJECT_SOURCE_DIR}/src)
+
 # Enable RapidCheck GTest support
 set(RC_ENABLE_GTEST ON CACHE BOOL "Enable GTest support for RapidCheck")
 

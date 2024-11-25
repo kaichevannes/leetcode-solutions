@@ -1,4 +1,4 @@
-#include "../../src/hashmap/01_ransom_note.h"
+#include "hashmap/01_ransom_note.h"
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <random>

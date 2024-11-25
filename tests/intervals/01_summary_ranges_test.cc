@@ -1,4 +1,4 @@
-#include "../../src/intervals/01_summary_ranges.h"
+#include "intervals/01_summary_ranges.h"
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>

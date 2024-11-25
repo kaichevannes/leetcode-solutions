@@ -1,4 +1,4 @@
-#include "../../src/sliding_window/01_minimum_size_subarray_sum.h"
+#include "sliding_window/01_minimum_size_subarray_sum.h"
 #include <algorithm>
 #include <climits>
 #include <gtest/gtest.h>

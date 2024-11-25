@@ -1,4 +1,4 @@
-#include "../../src/stack/01_valid_parentheses.h"
+#include "stack/01_valid_parentheses.h"
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>

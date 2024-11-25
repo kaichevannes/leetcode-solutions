@@ -1,4 +1,4 @@
-#include "../../src/matrix/01_valid_sudoku.h"
+#include "matrix/01_valid_sudoku.h"
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <random>
