@@ -8,5 +8,7 @@ pkgs.mkShell {
 
   shellHook = ''
     export CTEST_OUTPUT_ON_FAILURE=1
+    export CC=clang
+    export CXX=clang++
   '';
 }
