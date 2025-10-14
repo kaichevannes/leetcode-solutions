@@ -13,7 +13,3 @@ To run only unit tests add:
 
 To run only the property tests:
 `-R <problem-number>Property`
-
-To avoid having to add the --output-on-failure flag when manually testing, add
-this environment variable:
-export CTEST_OUTPUT_ON_FAILURE=1
