@@ -1,7 +1,7 @@
-#include "01_minimum_size_subarray_sum.h"
+#include "solution.h"
 #include <climits>
 
-int MinimumSizeSubArraySum::minSubArrayLen(int target, std::vector<int> &nums) {
+int Solution::minSubArrayLen(int target, std::vector<int> &nums) {
   int left = 0;
   int right = 0;
   int smallestSubArray = INT_MAX;

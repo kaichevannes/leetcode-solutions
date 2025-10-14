@@ -27,9 +27,20 @@ FetchContent_MakeAvailable(rapidcheck)
 
 enable_testing()
 
-file(GLOB SUBDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "[0-9][0-9][0-9][0-9]-*")
+file(GLOB SUBDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "[0-9][0-9][0-9][0-9]_*")
 foreach(subdir ${SUBDIRS})
-    if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${subdir}")
-        add_subdirectory(${subdir})
+    if(NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${subdir}")
+      message(FATAL_ERROR "Expected ${subdir} to be a directory")
     endif()
+
+    set(SRC_FILES
+        "${CMAKE_CURRENT_SOURCE_DIR}/${subdir}/solution.cc"
+        "${CMAKE_CURRENT_SOURCE_DIR}/${subdir}/test.cc"
+    )
+
+    add_executable(${subdir} ${SRC_FILES})
+    target_link_libraries(${subdir} PRIVATE gtest gtest_main rapidcheck rapidcheck_gtest)
+
+    include(GoogleTest)
+    gtest_discover_tests(${subdir})
 endforeach()
