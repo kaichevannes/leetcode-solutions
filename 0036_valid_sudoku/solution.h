@@ -1,10 +1,5 @@
-#ifndef VALID_SUDOKU_H
-#define VALID_SUDOKU_H
-
 #include <vector>
-class ValidSudoku {
+class Solution {
 public:
   bool isValidSudoku(std::vector<std::vector<char>> &);
 };
-
-#endif

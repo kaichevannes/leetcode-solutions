@@ -1,51 +1,48 @@
-#include "intervals/01_summary_ranges.h"
+#include "solution.h"
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 #include <string>
 
-class SummaryRangesTest : public testing::Test {
+class Test0228 : public testing::Test {
 protected:
-  SummaryRanges summaryRanges;
+  Solution solution;
   std::vector<int> nums;
 };
 
-TEST_F(SummaryRangesTest, ReturnsEmptyListWhenInputIsEmpty) {
+TEST_F(Test0228, ReturnsEmptyListWhenInputIsEmpty) {
   nums = {};
-  EXPECT_EQ(std::vector<std::string>({}), summaryRanges.summaryRanges(nums));
+  EXPECT_EQ(std::vector<std::string>({}), solution.summaryRanges(nums));
 }
 
-TEST_F(SummaryRangesTest, GroupsConsecutiveNumbersIntoSingleRange) {
+TEST_F(Test0228, GroupsConsecutiveNumbersIntoSingleRange) {
   nums = {0, 1, 2};
-  EXPECT_EQ(std::vector<std::string>({"0->2"}),
-            summaryRanges.summaryRanges(nums));
+  EXPECT_EQ(std::vector<std::string>({"0->2"}), solution.summaryRanges(nums));
 }
 
-TEST_F(SummaryRangesTest, ReturnsSingleNumberAsIndividualRange) {
+TEST_F(Test0228, ReturnsSingleNumberAsIndividualRange) {
   nums = {0};
-  EXPECT_EQ(std::vector<std::string>({"0"}), summaryRanges.summaryRanges(nums));
+  EXPECT_EQ(std::vector<std::string>({"0"}), solution.summaryRanges(nums));
 }
 
-TEST_F(SummaryRangesTest, ReturnsSingleNegativeNumberAsIndividualRange) {
+TEST_F(Test0228, ReturnsSingleNegativeNumberAsIndividualRange) {
   nums = {-1};
-  EXPECT_EQ(std::vector<std::string>({"-1"}),
-            summaryRanges.summaryRanges(nums));
+  EXPECT_EQ(std::vector<std::string>({"-1"}), solution.summaryRanges(nums));
 }
 
-TEST_F(SummaryRangesTest, GroupsListWithSeparatedNumbersIntoMultipleRanges) {
+TEST_F(Test0228, GroupsListWithSeparatedNumbersIntoMultipleRanges) {
   nums = {0, 1, 2, 4, 5, 7};
   EXPECT_EQ(std::vector<std::string>({"0->2", "4->5", "7"}),
-            summaryRanges.summaryRanges(nums));
+            solution.summaryRanges(nums));
 }
 
-TEST_F(SummaryRangesTest, HandlesMaximumSizeInput) {
+TEST_F(Test0228, HandlesMaximumSizeInput) {
   nums = {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1,
           0,   1,  2,  3,  4,  5,  6,  7,  8,  9};
-  EXPECT_EQ(std::vector<std::string>({"-10->9"}),
-            summaryRanges.summaryRanges(nums));
+  EXPECT_EQ(std::vector<std::string>({"-10->9"}), solution.summaryRanges(nums));
 }
 
-class SummaryRangesTestProperty : public SummaryRangesTest {
+class TestProperty0228 : public Test0228 {
 protected:
   rc::Gen<std::vector<int>> genNums() {
     return rc::gen::map(genUniqueIntVector(), [](std::vector<int> nums) {
@@ -74,15 +71,15 @@ private:
   }
 };
 
-RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty,
-                      OutputSizeIsNoGreaterThanInputSize, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0228, OutputSizeIsNoGreaterThanInputSize,
+                      ()) {
   nums = *genNums();
-  RC_ASSERT(summaryRanges.summaryRanges(nums).size() <= nums.size());
+  RC_ASSERT(solution.summaryRanges(nums).size() <= nums.size());
 }
 
-RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, ProducesValidRanges, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0228, ProducesValidRanges, ()) {
   nums = *genNums();
-  std::vector<std::string> ranges = summaryRanges.summaryRanges(nums);
+  std::vector<std::string> ranges = solution.summaryRanges(nums);
 
   for (const std::string &range : ranges) {
     if (!isRange(range))
@@ -94,10 +91,10 @@ RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty, ProducesValidRanges, ()) {
   }
 }
 
-RC_GTEST_FIXTURE_PROP(SummaryRangesTestProperty,
+RC_GTEST_FIXTURE_PROP(TestProperty0228,
                       AllNumbersWithinOutputRangesBelongToInput, ()) {
   nums = *genNums();
-  std::vector<std::string> ranges = summaryRanges.summaryRanges(nums);
+  std::vector<std::string> ranges = solution.summaryRanges(nums);
 
   for (std::string range : ranges) {
     if (!isRange(range)) {

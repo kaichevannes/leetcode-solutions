@@ -1,4 +1,4 @@
-#include "01_valid_sudoku.h"
+#include "solution.h"
 #include <cassert>
 #include <cctype>
 #include <iostream>
@@ -35,7 +35,8 @@ private:
 
   int number(Cell cell) const {
     if (!std::isdigit(board[cell.row][cell.col])) {
-      std::cerr << "board[cell.row][cell.col] = [" << board[cell.row][cell.col] << "]" << std::endl;
+      std::cerr << "board[cell.row][cell.col] = [" << board[cell.row][cell.col]
+                << "]" << std::endl;
     }
     assert(std::isdigit(board[cell.row][cell.col]));
     return board[cell.row][cell.col] - '0';
@@ -49,7 +50,7 @@ private:
   }
 };
 
-bool ValidSudoku::isValidSudoku(std::vector<std::vector<char>> &board) {
+bool Solution::isValidSudoku(std::vector<std::vector<char>> &board) {
   assert(board.size() == GRID_SIZE && board[0].size() == GRID_SIZE);
 
   SudokuRuleChecker sudokuRuleChecker(board);

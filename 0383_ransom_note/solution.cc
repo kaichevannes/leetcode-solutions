@@ -1,6 +1,6 @@
-#include "01_ransom_note.h"
+#include "solution.h"
 
-bool RansomNote::canConstruct(std::string ransomNote, std::string magazine) {
+bool Solution::canConstruct(std::string ransomNote, std::string magazine) {
   for (char c : ransomNote) {
     if (magazine.find(c) == std::string::npos)
       return false;

@@ -1,17 +1,17 @@
-#include "matrix/01_valid_sudoku.h"
+#include "solution.h"
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <random>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
-class ValidSudokuTest : public testing::Test {
+class Test0036 : public testing::Test {
 protected:
-  ValidSudoku validSudoku;
+  Solution solution;
   std::vector<std::vector<char>> board;
 };
 
-TEST_F(ValidSudokuTest, EmptyBoard) {
+TEST_F(Test0036, EmptyBoard) {
   board = {
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -23,10 +23,10 @@ TEST_F(ValidSudokuTest, EmptyBoard) {
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
   };
-  EXPECT_TRUE(validSudoku.isValidSudoku(board));
+  EXPECT_TRUE(solution.isValidSudoku(board));
 };
 
-TEST_F(ValidSudokuTest, DiagonalBoard) {
+TEST_F(Test0036, DiagonalBoard) {
   board = {
       {'1', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '2', '.', '.', '.', '.', '.', '.', '.'},
@@ -38,10 +38,10 @@ TEST_F(ValidSudokuTest, DiagonalBoard) {
       {'.', '.', '.', '.', '.', '.', '.', '8', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '9'},
   };
-  EXPECT_TRUE(validSudoku.isValidSudoku(board));
+  EXPECT_TRUE(solution.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, InvalidRow) {
+TEST_F(Test0036, InvalidRow) {
   board = {
       {'1', '.', '.', '1', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -53,10 +53,10 @@ TEST_F(ValidSudokuTest, InvalidRow) {
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
   };
-  EXPECT_FALSE(validSudoku.isValidSudoku(board));
+  EXPECT_FALSE(solution.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, MultipleInvalidRows) {
+TEST_F(Test0036, MultipleInvalidRows) {
   board = {
       {'1', '.', '.', '1', '.', '.', '1', '.', '.'},
       {'.', '2', '2', '.', '2', '.', '.', '2', '.'},
@@ -68,10 +68,10 @@ TEST_F(ValidSudokuTest, MultipleInvalidRows) {
       {'8', '.', '.', '.', '.', '.', '.', '.', '8'},
       {'9', '9', '9', '9', '9', '9', '9', '9', '9'},
   };
-  EXPECT_FALSE(validSudoku.isValidSudoku(board));
+  EXPECT_FALSE(solution.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, InvalidColumn) {
+TEST_F(Test0036, InvalidColumn) {
   board = {
       {'1', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -83,10 +83,10 @@ TEST_F(ValidSudokuTest, InvalidColumn) {
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
   };
-  EXPECT_FALSE(validSudoku.isValidSudoku(board));
+  EXPECT_FALSE(solution.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, MultipleInvalidColumns) {
+TEST_F(Test0036, MultipleInvalidColumns) {
   board = {
       {'1', '2', '.', '4', '.', '6', '7', '.', '9'},
       {'.', '2', '3', '.', '5', '.', '.', '8', '9'},
@@ -98,10 +98,10 @@ TEST_F(ValidSudokuTest, MultipleInvalidColumns) {
       {'.', '.', '.', '.', '.', '.', '.', '8', '9'},
       {'.', '2', '3', '4', '5', '6', '7', '.', '9'},
   };
-  EXPECT_FALSE(validSudoku.isValidSudoku(board));
+  EXPECT_FALSE(solution.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, InvalidSubBox) {
+TEST_F(Test0036, InvalidSubBox) {
   board = {
       {'.', '.', '.', '.', '.', '.', '.', '1', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -113,10 +113,10 @@ TEST_F(ValidSudokuTest, InvalidSubBox) {
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
   };
-  EXPECT_FALSE(validSudoku.isValidSudoku(board));
+  EXPECT_FALSE(solution.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, MultipleInvalidSubBoxes) {
+TEST_F(Test0036, MultipleInvalidSubBoxes) {
   board = {
       {'1', '.', '.', '1', '2', '3', '8', '.', '.'},
       {'.', '1', '.', '3', '.', '.', '7', '8', '.'},
@@ -128,10 +128,10 @@ TEST_F(ValidSudokuTest, MultipleInvalidSubBoxes) {
       {'.', '.', '.', '.', '6', '.', '.', '.', '.'},
       {'.', '.', '.', '.', '.', '6', '.', '.', '.'},
   };
-  EXPECT_FALSE(validSudoku.isValidSudoku(board));
+  EXPECT_FALSE(solution.isValidSudoku(board));
 }
 
-TEST_F(ValidSudokuTest, ValidSudoku) {
+TEST_F(Test0036, ValidSudoku) {
   board = {
       {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
       {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
@@ -143,10 +143,10 @@ TEST_F(ValidSudokuTest, ValidSudoku) {
       {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
       {'.', '.', '.', '.', '8', '.', '.', '7', '9'},
   };
-  EXPECT_TRUE(validSudoku.isValidSudoku(board));
+  EXPECT_TRUE(solution.isValidSudoku(board));
 }
 
-class ValidSudokuTestProperty : public ValidSudokuTest {
+class TestProperty0036 : public Test0036 {
 protected:
   std::vector<char> nonEmptyCellValues{'1', '2', '3', '4', '5',
                                        '6', '7', '8', '9'};
@@ -169,10 +169,10 @@ private:
   }
 };
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
-                      ValidAfterIncrementingNonEmptyCells, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0036, ValidAfterIncrementingNonEmptyCells,
+                      ()) {
   auto board = defaultBoard();
-  RC_PRE(validSudoku.isValidSudoku(board));
+  RC_PRE(solution.isValidSudoku(board));
 
   auto incrementCellValue = [](char c) -> char {
     if (c == '.') {
@@ -185,50 +185,47 @@ RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
     std::transform(row.begin(), row.end(), row.begin(), incrementCellValue);
   }
 
-  RC_ASSERT(validSudoku.isValidSudoku(board));
+  RC_ASSERT(solution.isValidSudoku(board));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingLeftToRight,
-                      ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0036, ValidAfterFlippingLeftToRight, ()) {
   auto board = defaultBoard();
-  RC_PRE(validSudoku.isValidSudoku(board));
+  RC_PRE(solution.isValidSudoku(board));
 
   for (std::vector<char> &row : board) {
     std::reverse(row.begin(), row.end());
   }
 
-  RC_ASSERT(validSudoku.isValidSudoku(board));
+  RC_ASSERT(solution.isValidSudoku(board));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty, ValidAfterFlippingTopToBottom,
-                      ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0036, ValidAfterFlippingTopToBottom, ()) {
   auto board = defaultBoard();
-  RC_PRE(validSudoku.isValidSudoku(board));
+  RC_PRE(solution.isValidSudoku(board));
 
   std::reverse(board.begin(), board.end());
 
-  RC_ASSERT(validSudoku.isValidSudoku(board));
+  RC_ASSERT(solution.isValidSudoku(board));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
+RC_GTEST_FIXTURE_PROP(TestProperty0036,
                       ValidAfterShufflingRowsInEachThreeRowBlock, ()) {
   auto board = defaultBoard();
-  RC_PRE(validSudoku.isValidSudoku(board));
+  RC_PRE(solution.isValidSudoku(board));
 
   for (int band = 0; band < 3; band++) {
     auto rng = std::mt19937{std::random_device{}()};
     std::shuffle(board.begin() + band * 3, board.begin() + (band + 1) * 3, rng);
   }
 
-  RC_ASSERT(validSudoku.isValidSudoku(board));
+  RC_ASSERT(solution.isValidSudoku(board));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
-                      InvalidWhenMoreThanNineOfTheSameNumber, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0036, InvalidWhenMoreThanNineOfTheSameNumber,
+                      ()) {
   char value = *rc::gen::elementOf(nonEmptyCellValues);
   auto board =
-      *genBoard(rc::gen::oneOf<char>(rc::gen::just('.'),
-      rc::gen::just(value)));
+      *genBoard(rc::gen::oneOf<char>(rc::gen::just('.'), rc::gen::just(value)));
 
   int totalNonEmptyElements = 0;
   for (std::vector<char> row : board) {
@@ -239,5 +236,5 @@ RC_GTEST_FIXTURE_PROP(ValidSudokuTestProperty,
   }
   RC_PRE(totalNonEmptyElements > 9);
 
-  RC_ASSERT(!validSudoku.isValidSudoku(board));
+  RC_ASSERT(!solution.isValidSudoku(board));
 }

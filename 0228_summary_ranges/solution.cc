@@ -1,4 +1,4 @@
-#include "01_summary_ranges.h"
+#include "solution.h"
 #include <algorithm>
 #include <format>
 #include <iterator>
@@ -42,7 +42,7 @@ convertRangesToStrings(const std::vector<Range> &ranges) {
   return result;
 }
 
-std::vector<std::string> SummaryRanges::summaryRanges(std::vector<int> &nums) {
+std::vector<std::string> Solution::summaryRanges(std::vector<int> &nums) {
   if (nums.empty())
     return {};
   std::vector<Range> ranges = buildRanges(nums);

@@ -1,11 +1,6 @@
-#ifndef RANSOM_NOTE_H
-#define RANSOM_NOTE_H
-
 #include <string>
 
-class RansomNote {
+class Solution {
 public:
   bool canConstruct(std::string, std::string);
 };
-
-#endif

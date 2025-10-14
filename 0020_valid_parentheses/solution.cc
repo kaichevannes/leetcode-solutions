@@ -1,8 +1,8 @@
-#include "01_valid_parentheses.h"
+#include "solution.h"
 #include <stack>
 #include <unordered_map>
 
-bool ValidParentheses::isValid(std::string s) {
+bool Solution::isValid(std::string s) {
   if (s.empty())
     return true;
 
