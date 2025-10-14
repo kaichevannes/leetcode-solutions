@@ -1,22 +1,21 @@
-#include "array_string/01_merge_sorted_array.h"
+#include "solution.h"
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
-class MergeSortedArrayTest : public testing::Test {
+class SolutionTest : public testing::Test {
 protected:
-  MergeSortedArray mergeSortedArray;
+  Solution solution;
   std::vector<int> nums1;
   std::vector<int> nums2;
 
   void callMerge(std::vector<int> &nums1, std::vector<int> &nums2) {
-    mergeSortedArray.merge(nums1, nums1.size() - nums2.size(), nums2,
-                           nums2.size());
+    solution.merge(nums1, nums1.size() - nums2.size(), nums2, nums2.size());
   }
 };
 
-TEST_F(MergeSortedArrayTest, SingleElementInNums1) {
+TEST_F(SolutionTest, SingleElementInNums1) {
   nums1 = {1};
 
   callMerge(nums1, nums2);
@@ -24,7 +23,7 @@ TEST_F(MergeSortedArrayTest, SingleElementInNums1) {
   EXPECT_EQ(std::vector<int>{1}, nums1);
 }
 
-TEST_F(MergeSortedArrayTest, SingleElementInNums2) {
+TEST_F(SolutionTest, SingleElementInNums2) {
   nums1 = {0};
   nums2 = {1};
 
@@ -33,7 +32,7 @@ TEST_F(MergeSortedArrayTest, SingleElementInNums2) {
   EXPECT_EQ(std::vector<int>{1}, nums1);
 }
 
-TEST_F(MergeSortedArrayTest, Nums1FollowedByNums2) {
+TEST_F(SolutionTest, Nums1FollowedByNums2) {
   nums1 = {1, 2, 3, 0, 0, 0};
   nums2 = {4, 5, 6};
 
@@ -42,7 +41,7 @@ TEST_F(MergeSortedArrayTest, Nums1FollowedByNums2) {
   EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
-TEST_F(MergeSortedArrayTest, Nums2FollowedByNums1) {
+TEST_F(SolutionTest, Nums2FollowedByNums1) {
   nums1 = {4, 5, 6, 0, 0, 0};
   nums2 = {1, 2, 3};
 
@@ -51,7 +50,7 @@ TEST_F(MergeSortedArrayTest, Nums2FollowedByNums1) {
   EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
-TEST_F(MergeSortedArrayTest, NumsInterleaved) {
+TEST_F(SolutionTest, NumsInterleaved) {
   nums1 = {1, 3, 5, 0, 0, 0};
   nums2 = {2, 4, 6};
 
@@ -60,7 +59,7 @@ TEST_F(MergeSortedArrayTest, NumsInterleaved) {
   EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
-TEST_F(MergeSortedArrayTest, SingleNums1SingleNums2) {
+TEST_F(SolutionTest, SingleNums1SingleNums2) {
   nums1 = {2, 0};
   nums2 = {1};
 
@@ -69,7 +68,7 @@ TEST_F(MergeSortedArrayTest, SingleNums1SingleNums2) {
   EXPECT_EQ(std::vector<int>({1, 2}), nums1);
 }
 
-TEST_F(MergeSortedArrayTest, LeadingZerosInNums2) {
+TEST_F(SolutionTest, LeadingZerosInNums2) {
   nums1 = {0, 0, 0};
   nums2 = {0, 0, 1};
 
@@ -78,7 +77,7 @@ TEST_F(MergeSortedArrayTest, LeadingZerosInNums2) {
   EXPECT_EQ(std::vector<int>({0, 0, 1}), nums1);
 }
 
-class MergeSortedArrayTestProperty : public MergeSortedArrayTest {
+class MergeSortedArrayTestProperty : public SolutionTest {
 protected:
   int m = *rc::gen::inRange(0, 200);
   int n = *rc::gen::inRange(0, 200);

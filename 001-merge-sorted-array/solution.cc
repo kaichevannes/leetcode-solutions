@@ -1,4 +1,4 @@
-#include "01_merge_sorted_array.h"
+#include "solution.h"
 
 /**
  * @brief Merge two non-decreasing arrays.
@@ -13,20 +13,17 @@
  * @param[in] nums2 The second sorted array. This will be merged into nums1.
  * @param[in] n The number elements to merge in nums2.
  */
-void MergeSortedArray::merge(std::vector<int> &nums1, int m,
-                             std::vector<int> &nums2, int n) {
+void Solution::merge(std::vector<int> &nums1, int m, std::vector<int> &nums2,
+                     int n) {
   int largestInNums1 = m - 1;
   int largestInNums2 = n - 1;
   int insertIndex = m + n - 1;
 
   auto moreToMergeIntoNums1 = [&] { return largestInNums2 >= 0; };
   auto nums1NotEmpty = [&] { return largestInNums1 >= 0; };
-  auto largerElementInNums1 = [&] {
-    return nums1[largestInNums1] > nums2[largestInNums2];
-  };
 
   while (moreToMergeIntoNums1()) {
-    if (nums1NotEmpty() && largerElementInNums1()) {
+    if (nums1NotEmpty() && nums1[largestInNums1] > nums2[largestInNums2]) {
       nums1[insertIndex--] = nums1[largestInNums1--];
     } else {
       nums1[insertIndex--] = nums2[largestInNums2--];
