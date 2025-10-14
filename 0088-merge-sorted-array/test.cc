@@ -4,7 +4,7 @@
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
-class Test001 : public testing::Test {
+class Test0088 : public testing::Test {
 protected:
   Solution solution;
   std::vector<int> nums1;
@@ -15,7 +15,7 @@ protected:
   }
 };
 
-TEST_F(Test001, SingleElementInNums1) {
+TEST_F(Test0088, SingleElementInNums1) {
   nums1 = {1};
 
   callMerge(nums1, nums2);
@@ -23,7 +23,7 @@ TEST_F(Test001, SingleElementInNums1) {
   EXPECT_EQ(std::vector<int>{1}, nums1);
 }
 
-TEST_F(Test001, SingleElementInNums2) {
+TEST_F(Test0088, SingleElementInNums2) {
   nums1 = {0};
   nums2 = {1};
 
@@ -32,7 +32,7 @@ TEST_F(Test001, SingleElementInNums2) {
   EXPECT_EQ(std::vector<int>{1}, nums1);
 }
 
-TEST_F(Test001, Nums1FollowedByNums2) {
+TEST_F(Test0088, Nums1FollowedByNums2) {
   nums1 = {1, 2, 3, 0, 0, 0};
   nums2 = {4, 5, 6};
 
@@ -41,7 +41,7 @@ TEST_F(Test001, Nums1FollowedByNums2) {
   EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
-TEST_F(Test001, Nums2FollowedByNums1) {
+TEST_F(Test0088, Nums2FollowedByNums1) {
   nums1 = {4, 5, 6, 0, 0, 0};
   nums2 = {1, 2, 3};
 
@@ -50,7 +50,7 @@ TEST_F(Test001, Nums2FollowedByNums1) {
   EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
-TEST_F(Test001, NumsInterleaved) {
+TEST_F(Test0088, NumsInterleaved) {
   nums1 = {1, 3, 5, 0, 0, 0};
   nums2 = {2, 4, 6};
 
@@ -59,7 +59,7 @@ TEST_F(Test001, NumsInterleaved) {
   EXPECT_EQ(std::vector<int>({1, 2, 3, 4, 5, 6}), nums1);
 }
 
-TEST_F(Test001, SingleNums1SingleNums2) {
+TEST_F(Test0088, SingleNums1SingleNums2) {
   nums1 = {2, 0};
   nums2 = {1};
 
@@ -68,7 +68,7 @@ TEST_F(Test001, SingleNums1SingleNums2) {
   EXPECT_EQ(std::vector<int>({1, 2}), nums1);
 }
 
-TEST_F(Test001, LeadingZerosInNums2) {
+TEST_F(Test0088, LeadingZerosInNums2) {
   nums1 = {0, 0, 0};
   nums2 = {0, 0, 1};
 
@@ -77,7 +77,7 @@ TEST_F(Test001, LeadingZerosInNums2) {
   EXPECT_EQ(std::vector<int>({0, 0, 1}), nums1);
 }
 
-class TestProperty001 : public Test001 {
+class TestProperty0088 : public Test0088 {
 protected:
   int m = *rc::gen::inRange(0, 200);
   int n = *rc::gen::inRange(0, 200);
@@ -105,7 +105,7 @@ void logVector(std::string vectorName, std::vector<int> vec) {
   std::cerr << ']' << std::endl;
 }
 
-RC_GTEST_FIXTURE_PROP(TestProperty001, Commutativity, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0088, Commutativity, ()) {
   RC_PRE(preConditionsMet());
   std::vector<int> nums1Copy = nums1;
   std::vector<int> nums2Copy = nums2;
@@ -119,7 +119,7 @@ RC_GTEST_FIXTURE_PROP(TestProperty001, Commutativity, ()) {
   RC_ASSERT(nums1 == nums2Copy);
 }
 
-RC_GTEST_FIXTURE_PROP(TestProperty001, HasCorrectElements, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0088, HasCorrectElements, ()) {
   RC_PRE(preConditionsMet());
 
   std::vector<int> elements;
@@ -133,7 +133,7 @@ RC_GTEST_FIXTURE_PROP(TestProperty001, HasCorrectElements, ()) {
   RC_ASSERT(std::is_permutation(nums1.begin(), nums1.end(), elements.begin()));
 }
 
-RC_GTEST_FIXTURE_PROP(TestProperty001, Nums1MergedWithEmptyIsNums1, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0088, Nums1MergedWithEmptyIsNums1, ()) {
   n = 0;
   nums2 = {};
   RC_PRE(preConditionsMet());
@@ -145,7 +145,7 @@ RC_GTEST_FIXTURE_PROP(TestProperty001, Nums1MergedWithEmptyIsNums1, ()) {
   RC_ASSERT(nums1Before == nums1);
 }
 
-RC_GTEST_FIXTURE_PROP(TestProperty001, EmptyMergedWithNums2IsNums2, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0088, EmptyMergedWithNums2IsNums2, ()) {
   m = 0;
   nums1 = {};
   RC_PRE(preConditionsMet());
@@ -157,7 +157,7 @@ RC_GTEST_FIXTURE_PROP(TestProperty001, EmptyMergedWithNums2IsNums2, ()) {
   RC_ASSERT(nums2Before == nums2);
 }
 
-RC_GTEST_FIXTURE_PROP(TestProperty001, NonDecreasingOrder, ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0088, NonDecreasingOrder, ()) {
   RC_PRE(preConditionsMet());
 
   padWithZeros(nums1);

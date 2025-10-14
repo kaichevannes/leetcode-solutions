@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
-project("interview-150")
+project("leetcode")
 
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Add compiler warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -21,13 +20,16 @@ FetchContent_Declare(
   GIT_TAG ff6af6fc683159deb51c543b065eba14dfcf329b
 )
 
-# Enable RapidCheck GTest support
 set(RC_ENABLE_GTEST ON CACHE BOOL "Enable GTest support for RapidCheck")
 
 FetchContent_MakeAvailable(googletest)
 FetchContent_MakeAvailable(rapidcheck)
 
-# Testing
 enable_testing()
 
-add_subdirectory(001-merge-sorted-array)
+file(GLOB SUBDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "[0-9][0-9][0-9][0-9]-*")
+foreach(subdir ${SUBDIRS})
+    if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${subdir}")
+        add_subdirectory(${subdir})
+    endif()
+endforeach()

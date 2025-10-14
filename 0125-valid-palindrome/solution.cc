@@ -1,4 +1,4 @@
-#include "01_valid_palindrome.h"
+#include "solution.h"
 #include <cctype>
 #include <iterator>
 #include <regex>
@@ -6,7 +6,7 @@
 std::string filterAlphaNumericCharacters(std::string);
 bool tailRecursiveIsPalindrome(std::string &, int, bool);
 
-bool ValidPalindrome::isPalindrome(std::string s) {
+bool Solution::isPalindrome(std::string s) {
   std::transform(begin(s), end(s), begin(s),
                  [](char c) { return std::tolower(c); });
   std::string alphaNumericString = filterAlphaNumericCharacters(s);

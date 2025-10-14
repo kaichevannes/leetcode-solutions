@@ -1,67 +1,63 @@
-#include "two_pointers/01_valid_palindrome.h"
+#include "solution.h"
 #include <gtest/gtest.h>
 #include <random>
 #include <rapidcheck.h>
 #include <rapidcheck/gtest.h>
 
-class ValidPalindromeTest : public testing::Test {
+class Test0125 : public testing::Test {
 protected:
-  ValidPalindrome validPalindrome;
+  Solution solution;
 };
 
-TEST_F(ValidPalindromeTest, EmptyString) {
-  EXPECT_TRUE(validPalindrome.isPalindrome(""));
-};
+TEST_F(Test0125, EmptyString) { EXPECT_TRUE(solution.isPalindrome("")); };
 
-TEST_F(ValidPalindromeTest, TwoLengthPalindrome) {
-  EXPECT_TRUE(validPalindrome.isPalindrome("ss"));
+TEST_F(Test0125, TwoLengthPalindrome) {
+  EXPECT_TRUE(solution.isPalindrome("ss"));
 }
 
-TEST_F(ValidPalindromeTest, NumberPalindrome) {
-  EXPECT_TRUE(validPalindrome.isPalindrome("00"));
+TEST_F(Test0125, NumberPalindrome) { EXPECT_TRUE(solution.isPalindrome("00")); }
+
+TEST_F(Test0125, TwoLengthDifferentCasePaldindome) {
+  EXPECT_TRUE(solution.isPalindrome("bB"));
 }
 
-TEST_F(ValidPalindromeTest, TwoLengthDifferentCasePaldindome) {
-  EXPECT_TRUE(validPalindrome.isPalindrome("bB"));
+TEST_F(Test0125, TwoLengthNotPalindrome) {
+
+  EXPECT_FALSE(solution.isPalindrome("ql"));
 }
 
-TEST_F(ValidPalindromeTest, TwoLengthNotPalindrome) {
+TEST_F(Test0125, PalindromeWithSpaces) {
 
-  EXPECT_FALSE(validPalindrome.isPalindrome("ql"));
+  EXPECT_TRUE(solution.isPalindrome("ab cde fggfe dcb a"));
 }
 
-TEST_F(ValidPalindromeTest, PalindromeWithSpaces) {
-
-  EXPECT_TRUE(validPalindrome.isPalindrome("ab cde fggfe dcb a"));
+TEST_F(Test0125, PalindromeWithPunctuation) {
+  EXPECT_TRUE(solution.isPalindrome("A man, a plan, a canal: Panama"));
 }
 
-TEST_F(ValidPalindromeTest, PalindromeWithPunctuation) {
-  EXPECT_TRUE(validPalindrome.isPalindrome("A man, a plan, a canal: Panama"));
+TEST_F(Test0125, NotPalindromeWithPunctuation) {
+  EXPECT_FALSE(solution.isPalindrome("Sentence; normal sentence."));
 }
 
-TEST_F(ValidPalindromeTest, NotPalindromeWithPunctuation) {
-  EXPECT_FALSE(validPalindrome.isPalindrome("Sentence; normal sentence."));
+TEST_F(Test0125, SingleLengthPalindrome) {
+  EXPECT_TRUE(solution.isPalindrome("Y"));
 }
 
-TEST_F(ValidPalindromeTest, SingleLengthPalindrome) {
-  EXPECT_TRUE(validPalindrome.isPalindrome("Y"));
+TEST_F(Test0125, LetterAndNumberPalindrome) {
+  EXPECT_FALSE(solution.isPalindrome("0P"));
 }
 
-TEST_F(ValidPalindromeTest, LetterAndNumberPalindrome) {
-  EXPECT_FALSE(validPalindrome.isPalindrome("0P"));
+TEST_F(Test0125, FourLengthPalindrome) {
+  EXPECT_TRUE(solution.isPalindrome("abba"));
 }
 
-TEST_F(ValidPalindromeTest, FourLengthPalindrome) {
-  EXPECT_TRUE(validPalindrome.isPalindrome("abba"));
+TEST_F(Test0125, FourLengthHalfPalindrome) {
+  EXPECT_FALSE(solution.isPalindrome("abca"));
 }
 
-TEST_F(ValidPalindromeTest, FourLengthHalfPalindrome) {
-  EXPECT_FALSE(validPalindrome.isPalindrome("abca"));
-}
-
-class ValidPalindromeTestProperty : public ValidPalindromeTest {
+class TestProperty0125 : public Test0125 {
 protected:
-  ValidPalindromeTestProperty() : rng(std::random_device{}()) {}
+  TestProperty0125() : rng(std::random_device{}()) {}
 
   rc::Gen<std::string> genEvenPalindrome() {
     return rc::gen::map<std::string>(
@@ -102,7 +98,7 @@ private:
   }
 
   rc::Gen<char> genSpecialChar() {
-    auto isEscapeSequenceChar = [](char c){return c == '\\';};
+    auto isEscapeSequenceChar = [](char c) { return c == '\\'; };
     return rc::gen::suchThat(rc::gen::inRange<char>(33, 127), [&](char c) {
       return !isEscapeSequenceChar(c) && !std::isalnum(c);
     });
@@ -123,10 +119,11 @@ private:
   }
 
   rc::Gen<std::string> interleaveSpecialChars(const std::string &palindrome) {
-    return rc::gen::map(
-        genSpecialString(), [palindrome, this](const std::string &specialChars) {
-          return applySpecialCharInterleaving(palindrome, specialChars);
-        });
+    return rc::gen::map(genSpecialString(),
+                        [palindrome, this](const std::string &specialChars) {
+                          return applySpecialCharInterleaving(palindrome,
+                                                              specialChars);
+                        });
   }
 
   std::string applySpecialCharInterleaving(std::string str,
@@ -155,22 +152,21 @@ private:
   }
 };
 
-RC_GTEST_FIXTURE_PROP(ValidPalindromeTestProperty, ReverseStringGivesSameValue,
-                      ()) {
+RC_GTEST_FIXTURE_PROP(TestProperty0125, ReverseStringGivesSameValue, ()) {
   std::string input = *rc::gen::string<std::string>();
   std::string reverseInput(input.rbegin(), input.rend());
-  RC_ASSERT(validPalindrome.isPalindrome(input) ==
-            validPalindrome.isPalindrome(reverseInput));
+  RC_ASSERT(solution.isPalindrome(input) ==
+            solution.isPalindrome(reverseInput));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidPalindromeTestProperty, EvenPalindromes, ()) {
-  RC_ASSERT(validPalindrome.isPalindrome(*genEvenPalindrome()));
+RC_GTEST_FIXTURE_PROP(TestProperty0125, EvenPalindromes, ()) {
+  RC_ASSERT(solution.isPalindrome(*genEvenPalindrome()));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidPalindromeTestProperty, OddPalindromes, ()) {
-  RC_ASSERT(validPalindrome.isPalindrome(*genOddPalindrome()));
+RC_GTEST_FIXTURE_PROP(TestProperty0125, OddPalindromes, ()) {
+  RC_ASSERT(solution.isPalindrome(*genOddPalindrome()));
 }
 
-RC_GTEST_FIXTURE_PROP(ValidPalindromeTestProperty, NonPalindromes, ()) {
-  RC_ASSERT_FALSE(validPalindrome.isPalindrome(*genNonPalindrome()));
+RC_GTEST_FIXTURE_PROP(TestProperty0125, NonPalindromes, ()) {
+  RC_ASSERT_FALSE(solution.isPalindrome(*genNonPalindrome()));
 }
