@@ -1,4 +1,7 @@
+#pragma once
+
 #include <cstddef>
+
 struct ListNode {
   int val;
   ListNode *next;
