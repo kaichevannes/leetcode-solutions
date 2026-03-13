@@ -2,14 +2,14 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators.hpp>
 
-TEST_CASE("A tree with one element has a depth of one") {
+TEST_CASE("[0104] A tree with one element has a depth of one") {
   Solution solution;
   TreeNode node1;
 
   REQUIRE(solution.maxDepth(&node1) == 1);
 }
 
-TEST_CASE("A tree with two elements has a depth of two") {
+TEST_CASE("[0104] A tree with two elements has a depth of two") {
   Solution solution;
   TreeNode node1;
   TreeNode node2;
@@ -19,7 +19,7 @@ TEST_CASE("A tree with two elements has a depth of two") {
   REQUIRE(solution.maxDepth(&node1) == 2);
 }
 
-TEST_CASE("A left-skewed tree with five elements has a depth of five") {
+TEST_CASE("[0104] A left-skewed tree with five elements has a depth of five") {
   Solution solution;
 
   TreeNode node1, node2, node3, node4, node5;
@@ -38,7 +38,7 @@ TEST_CASE("A left-skewed tree with five elements has a depth of five") {
   REQUIRE(solution.maxDepth(&node1) == 5);
 }
 
-TEST_CASE("A full tree") {
+TEST_CASE("[0104] A full tree") {
   SECTION("with three elements has a depth of two") {
     Solution solution;
     TreeNode node1, node2, node3;
