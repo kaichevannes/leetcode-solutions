@@ -10,11 +10,8 @@ void recurse(TreeNode *node, std::vector<int> &result) {
   result.push_back(node->val);
 
   // recurse
-  if (node->right) {
-    recurse(node->right, result);
-  } else {
-    recurse(node->left, result);
-  }
+  recurse(node->right, result);
+  recurse(node->left, result);
 
   // post
 }

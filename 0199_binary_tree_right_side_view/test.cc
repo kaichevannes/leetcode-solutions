@@ -5,6 +5,7 @@
 TEST_CASE("[0199] A tree with no elements gives an empty right side view") {
   Solution solution;
 
+  //
   REQUIRE(solution.rightSideView(nullptr) == std::vector<int>{});
 }
 
@@ -12,6 +13,7 @@ TEST_CASE("[0199] A tree with one element returns its value") {
   Solution solution;
   TreeNode node1 = TreeNode(1);
 
+  // 1
   REQUIRE(solution.rightSideView(&node1) == std::vector<int>{1});
 }
 
@@ -43,7 +45,7 @@ TEST_CASE("[0199] A full tree") {
     REQUIRE(solution.rightSideView(&node1) == std::vector<int>{1, 3});
   }
 
-  SECTION("With six elements has a right side view of nodes 1, 3 and 6") {
+  SECTION("With seven elements has a right side view of nodes 1, 3 and 7") {
     Solution solution;
     TreeNode node1 = TreeNode(1);
     TreeNode node2 = TreeNode(2);
@@ -51,18 +53,19 @@ TEST_CASE("[0199] A full tree") {
     TreeNode node4 = TreeNode(4);
     TreeNode node5 = TreeNode(5);
     TreeNode node6 = TreeNode(6);
+    TreeNode node7 = TreeNode(7);
 
-    //   1
-    //  2 3
-    // 4 5 6
+    //    1
+    //  2   3
+    // 4 5 6 7
     node1.left = &node2;
     node1.right = &node3;
     node2.left = &node4;
     node2.right = &node5;
-    node3.left = &node5;
-    node3.right = &node6;
+    node3.left = &node6;
+    node3.right = &node7;
 
-    REQUIRE(solution.rightSideView(&node1) == std::vector<int>{1, 3, 6});
+    REQUIRE(solution.rightSideView(&node1) == std::vector<int>{1, 3, 7});
   }
 }
 
@@ -94,7 +97,8 @@ TEST_CASE("[0199] A left-skewed tree has a right side view of its elements") {
           std::vector<int>{1, 2, 3, 4, 5, 6, 7});
 }
 
-TEST_CASE("[0199] Example 1") {
+TEST_CASE("[0199] A tree with left nodes deeper than right nodes should pick "
+          "up those left nodes") {
   Solution solution;
   TreeNode node1 = TreeNode(1);
   TreeNode node2 = TreeNode(2);
@@ -102,12 +106,14 @@ TEST_CASE("[0199] Example 1") {
   TreeNode node4 = TreeNode(4);
   TreeNode node5 = TreeNode(5);
 
-  //   1 <------
-  // 2   3 <----
-  //  4   5 <---
+  //    1 <------
+  //   2 3 <-----
+  //  4 <--------
+  // 5 <---------
   node1.left = &node2;
-  node2.right = &node4;
-  node3.right = &node5;
+  node1.right = &node3;
+  node2.left = &node4;
+  node4.left = &node5;
 
-  REQUIRE(solution.rightSideView(&node1) == std::vector<int>{1, 3, 5});
+  REQUIRE(solution.rightSideView(&node1) == std::vector<int>{1, 3, 4, 5});
 }
