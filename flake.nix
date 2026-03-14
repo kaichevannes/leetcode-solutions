@@ -1,6 +1,4 @@
 {
-  description = "C++ project";
-
   inputs.nixpkgs.url = "nixpkgs";
 
   outputs =
@@ -10,7 +8,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in
     {
-      devShells.${system}.default = pkgs.mkShell.override { stdenv = pkgs.clangStdenv; } {
+      devShells.${system}.default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages.libcxxStdenv; } {
         packages = with pkgs; [
           cmake
           ninja
