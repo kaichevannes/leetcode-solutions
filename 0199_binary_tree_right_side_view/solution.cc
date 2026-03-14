@@ -2,7 +2,7 @@
 #include <deque>
 
 std::vector<int> Solution::rightSideView(TreeNode *root) {
-  std::vector<int> result = std::vector<int>{};
+  std::vector<int> result;
   std::deque<TreeNode *> queue;
   std::deque<TreeNode *> nextLayer;
 
@@ -23,8 +23,7 @@ std::vector<int> Solution::rightSideView(TreeNode *root) {
 
     if (queue.empty()) {
       result.push_back(node->val);
-      queue.insert(queue.end(), nextLayer.begin(), nextLayer.end());
-      nextLayer.clear();
+      std::swap(queue, nextLayer);
     }
   };
 
