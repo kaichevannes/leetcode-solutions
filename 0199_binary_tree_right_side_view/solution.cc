@@ -1,31 +1,34 @@
 #include "solution.h"
-#include <deque>
+#include <queue>
 
 std::vector<int> Solution::rightSideView(TreeNode *root) {
   std::vector<int> result;
-  std::deque<TreeNode *> queue;
-  std::deque<TreeNode *> nextLayer;
+  std::queue<TreeNode *> queue;
 
   if (root) {
-    queue.push_back(root);
+    queue.push(root);
   }
 
   while (!queue.empty()) {
-    TreeNode *node = queue.front();
-    queue.pop_front();
+    int nodesInLayer = queue.size();
 
-    if (node->left) {
-      nextLayer.push_back(node->left);
-    }
-    if (node->right) {
-      nextLayer.push_back(node->right);
-    }
+    for (int i = 0; i < nodesInLayer; i++) {
+      TreeNode *node = queue.front();
+      queue.pop();
 
-    if (queue.empty()) {
-      result.push_back(node->val);
-      std::swap(queue, nextLayer);
+      if (node->left) {
+        queue.push(node->left);
+      }
+      if (node->right) {
+        queue.push(node->right);
+      }
+
+      bool atLastNodeInLayer = (i == nodesInLayer - 1);
+      if (atLastNodeInLayer) {
+        result.push_back(node->val);
+      }
     }
-  };
+  }
 
   return result;
 }
